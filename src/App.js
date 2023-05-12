@@ -1,29 +1,61 @@
 import './App.css';
-import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
-import { Web3Modal } from '@web3modal/react'
-import { configureChains, createConfig, WagmiConfig } from 'wagmi'
-import { arbitrum, mainnet, polygon } from 'wagmi/chains'
-import { Web3Button } from '@web3modal/react';
+import SignClient from '@walletconnect/sign-client'
+import { Web3Modal } from '@web3modal/standalone'
+import { useEffect, useState } from "react";
 
-const chains = [arbitrum, mainnet, polygon]
 const projectId = '53e037a7c58326ae950e9c929cd78720'
 
-const { publicClient } = configureChains(chains, [w3mProvider({ projectId })])
-const wagmiConfig = createConfig({
-    autoConnect: true,
-    connectors: w3mConnectors({ projectId, version: 1, chains }),
-    publicClient
-})
-const ethereumClient = new EthereumClient(wagmiConfig, chains)
-function App() {
-    return (
-        <>
-            <WagmiConfig config={wagmiConfig}>
-                <Web3Button />
-            </WagmiConfig>
+const web3Modal = new Web3Modal({
+    projectId: projectId,
+    walletConnectVersion: 2,
+});
 
-            <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
-        </>
+function App() {
+    const [signClient, setSignClient] = useState(undefined);
+
+    async function onInitializeSignClient() {
+        const client = await SignClient.init({
+            projectId: projectId
+        });
+        setSignClient(client);
+    }
+
+    async function onOpenModal() {
+        if (signClient) {
+            const namespaces = {
+                eip155: {
+                    methods: ["eth_sign"],
+                    chains: ["eip155:1"],
+                    events: ["accountsChanged"],
+                },
+            };
+            const { uri, approval } = await signClient.connect({
+                requiredNamespaces: namespaces,
+            });
+            if (uri) {
+                await web3Modal.openModal({
+                    uri,
+                    standaloneChains: namespaces.eip155.chains,
+                });
+                await approval();
+                web3Modal.closeModal();
+            }
+        }
+    }
+
+    useEffect(() => {
+        onInitializeSignClient();
+    }, []);
+
+    // return (
+    //     <>
+    //         asdf
+    //     </>
+    // );
+    return signClient ? (
+        <button onClick={onOpenModal}>Connect Wallet</button>
+    ) : (
+        "Initializing..."
     );
 }
 
