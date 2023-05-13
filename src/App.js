@@ -1,62 +1,134 @@
 import './App.css';
-import SignClient from '@walletconnect/sign-client'
-import { Web3Modal } from '@web3modal/standalone'
+import SignClient from '@walletconnect/sign-client';
+import { Web3Modal } from '@web3modal/standalone';
 import { useEffect, useState } from "react";
 
 const projectId = '53e037a7c58326ae950e9c929cd78720'
 
 const web3Modal = new Web3Modal({
     projectId: projectId,
+    standaloneChains: ["eip155:1"],
     walletConnectVersion: 2,
+    themeMode: "dark",
+    themeVariables: {
+        "--w3m-font-family": "Roboto, sans-serif",
+        "--w3m-accent-color": "yellow"
+    }
 });
 
 function App() {
-    const [signClient, setSignClient] = useState(undefined);
+    const [signClient, setSignClient] = useState();
+    const [sessions, setSessions] = useState([]);
+    const [accounts, setAccounts] = useState([]);
 
-    async function onInitializeSignClient() {
-        const client = await SignClient.init({
-            projectId: projectId
-        });
-        setSignClient(client);
+    async function createClient() {
+        try {
+            const client = await SignClient.init({
+                projectId: projectId
+            });
+            setSignClient(client);
+            subscribeToEvents(client)
+        }
+        catch (e) {
+            console.error(e);
+        }
     }
 
-    async function onOpenModal() {
-        if (signClient) {
+    async function handleConnect() {
+        if (!signClient)
+            throw new Error('Cannot connect. Sign Client is not created.')
+
+        try {
             const namespaces = {
+                //eth mainnet
                 eip155: {
-                    methods: ["eth_sign"],
+                    methods: ["eth_sendTransaction"],
                     chains: ["eip155:1"],
-                    events: ["accountsChanged"],
+                    events: ["connect", "disconnect", "accountsChanged"],
                 },
             };
             const { uri, approval } = await signClient.connect({
                 requiredNamespaces: namespaces,
             });
+
             if (uri) {
-                await web3Modal.openModal({
+                web3Modal.openModal({
                     uri,
-                    standaloneChains: namespaces.eip155.chains,
                 });
-                await approval();
-                web3Modal.closeModal();
+                const sessionNamespace = await approval();
+                onSessionConnect(sessionNamespace);
+                web3Modal.closeModal()
             }
+        }
+
+        catch (e) {
+            console.error(e);
         }
     }
 
-    useEffect(() => {
-        onInitializeSignClient();
-    }, []);
+    async function onSessionConnect(session) {
+        if (!session)
+            throw new Error('Session does not exist.')
 
-    // return (
-    //     <>
-    //         asdf
-    //     </>
-    // );
-    return signClient ? (
-        <button onClick={onOpenModal}>Connect Wallet</button>
-    ) : (
-        "Initializing..."
-    );
+        try {
+            setSessions(session)
+            setAccounts(session.namespaces.eip155.accounts[0].slice(9))
+        }
+        catch (e) {
+            console.error(e);
+        }
+    }
+
+    async function handleDisconnect() {
+        try {
+            await signClient.disconnect({
+                topic: sessions.topic,
+                code: 6000,
+                message: 'User disconnected.'
+            })
+            reset()
+        }
+        catch (e) {
+            console.error(e);
+        }
+    }
+
+    async function subscribeToEvents(client) {
+        if (!client)
+            throw new Error('No events if not client.')
+
+        try {
+            client.on("session_delete", () => {
+                console.log('User disconnected their session from their wallet.');
+                reset()
+            })
+        }
+        catch (e) {
+            console.error(e);
+        }
+    }
+
+    const reset = () => {
+        setAccounts([]);
+        setSessions([])
+    }
+
+    useEffect(() => {
+        if (!signClient)
+            createClient();
+    }, [signClient]);
+
+    return (
+        <div className="App">
+
+            {accounts.length ? (<>
+
+                <p>{accounts}</p>
+                <button onClick={handleDisconnect}>Disconnect</button>
+            </>) :
+                <button onClick={handleConnect} disabled={!signClient}>Connect</button>}
+        </div>
+    )
 }
 
 export default App;
