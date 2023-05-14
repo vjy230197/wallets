@@ -1,11 +1,12 @@
 import React from 'react'
 import Metamask from './Metamask';
 import WalletConnect from './WalletConnect';
+import classes from './Wallets.module.css';
 
 function Wallets() {
     return (
         <>
-            <div className='flex py-20 px-20'>
+            <div className={classes.wallets}>
                 <WalletConnect />
                 <Metamask />
             </div>

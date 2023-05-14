@@ -1,0 +1,5 @@
+.wallets{
+    min-height: 50rem;
+    display: flex;
+    padding: 5rem;
+}
