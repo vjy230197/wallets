@@ -21,7 +21,8 @@
     "viem": "^0.3.22",
     "wagmi": "^1.0.2",
     "web-vitals": "^2.1.4",
-    "web3": "^1.10.0"
+    "web3": "^1.10.0",
+    "react-router-dom": "^6.9.0"
   },
   "scripts": {
     "start": "react-scripts start",
