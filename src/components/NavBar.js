@@ -3,7 +3,9 @@ import React from 'react'
 function NavBar() {
 
     return (
-        <Web3Button />
+        <div>
+            Navbar
+        </div>
     )
 }
 
