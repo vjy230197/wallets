@@ -9,10 +9,12 @@ function App() {
     return (
         <div className="App">
             <NavBar />
-            <Routes>
-                <Route path='/' element={<Home />}></Route>
-                <Route path='/wallets' element={<Wallets />}></Route>
-            </Routes>
+            <div className='body'>
+                <Routes>
+                    <Route path='/' element={<Home />}></Route>
+                    <Route path='/wallets' element={<Wallets />}></Route>
+                </Routes>
+            </div>
             <Footer />
         </div>
     )
