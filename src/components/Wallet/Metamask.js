@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import metamask from '../Assets/metamask-logo.svg'
 function Metamask() {
     const [accounts, setAccount] = useState([]);
 

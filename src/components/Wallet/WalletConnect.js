@@ -2,7 +2,7 @@ import SignClient from '@walletconnect/sign-client';
 import { Web3Modal } from '@web3modal/standalone';
 import { useEffect } from "react";
 import React, { useState } from 'react';
-import wc from '../Assets/wc.png'
+import wc from '../../Assets/wc.png'
 
 function WalletConnect() {
     const [signClient, setSignClient] = useState();
