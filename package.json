@@ -14,15 +14,17 @@
     "@web3modal/ethereum": "^2.4.1",
     "@web3modal/react": "^2.4.1",
     "@web3modal/standalone": "^2.4.1",
+    "bootstrap": "^5.2.3",
     "ethers": "^6.3.0",
     "react": "^18.2.0",
+    "react-bootstrap": "^2.7.4",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.9.0",
     "react-scripts": "5.0.1",
     "viem": "^0.3.22",
     "wagmi": "^1.0.2",
     "web-vitals": "^2.1.4",
-    "web3": "^1.10.0",
-    "react-router-dom": "^6.9.0"
+    "web3": "^1.10.0"
   },
   "scripts": {
     "start": "react-scripts start",

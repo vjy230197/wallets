@@ -2,7 +2,7 @@ import './App.css';
 import Wallets from './components/Wallet/Wallets';
 import NavBar from './Layout/NavBar';
 import Footer from './Layout/Footer'
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Switch } from "react-router-dom";
 import Home from './pages/Home';
 
 function App() {
