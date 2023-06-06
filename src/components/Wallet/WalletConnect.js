@@ -13,10 +13,10 @@ function WalletConnect() {
         projectId: projectId,
         standaloneChains: ["eip155:1"],
         walletConnectVersion: 2,
-        themeMode: "dark",
         themeVariables: {
             "--w3m-font-family": "Roboto, sans-serif",
-            "--w3m-accent-color": "yellow"
+            "--w3m-accent-color": "black",
+            "--w3m-background-color": "white"
         }
     });
     async function createClient() {

@@ -1,6 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import { ethers } from 'ethers';
+
+
 function Metamask() {
     const [accounts, setAccount] = useState([]);
+    const [provider, setProvider] = useState("");
+    const [signature, setSignature] = useState();
 
     const connectMetamask = () => {
         if (window.ethereum) {
@@ -9,12 +14,36 @@ function Metamask() {
                 method: 'eth_requestAccounts'
             }).then((result) => {
                 accountChangedHandler(result[0])
+
+                const provider = new ethers.BrowserProvider(window.ethereum);
+
+                setProvider(provider)
+
+                setTimeout(() => {
+                    signMessage()
+                }, 1000);
+
+
             }).catch((error) => {
                 console.error(error);
             });
         }
         else {
             console.log('no metamask installed.');
+        }
+    }
+
+    const signMessage = async () => {
+        try {
+            const message = 'this is text';
+            const signer = await provider.getSigner();
+            const signature = await signer.signMessage(message);
+
+            setSignature(signature)
+        }
+
+        catch (e) {
+            console.error(e);
         }
     }
 
@@ -32,7 +61,7 @@ function Metamask() {
 
     return (
         <div>
-            {accounts.length ? (<>
+            {accounts.length && signature ? (<>
                 <p>{accounts}</p>
                 <button onClick={handleDisconnect}>Disconnect</button>
             </>) :
