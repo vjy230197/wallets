@@ -19,10 +19,9 @@ function Metamask() {
 
                 setProvider(provider)
 
-                setTimeout(() => {
+                if (typeof window.ethereum !== 'undefined' || (typeof window.web3 !== 'undefined')) {
                     signMessage()
-                }, 1000);
-
+                }
 
             }).catch((error) => {
                 console.error(error);
