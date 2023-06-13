@@ -9,6 +9,7 @@ import DropdownSelect from './components/Dropdown/DropdownSelect';
 import Counter from './components/Counter/Counter';
 import Timer from './components/Timer/Timer';
 import ManualCounter from './components/Counter/ManualCounter';
+import Mint from './components/Mint/Mint';
 
 function App() {
     return (
@@ -18,6 +19,7 @@ function App() {
                 <Routes>
                     <Route path='/' element={<Home />}></Route>
                     <Route path='/wallets' element={<Wallets />}></Route>
+                    <Route path='/mint' element={<Mint />}></Route>
                     {/* <Route path='/tasks' element={<Todo />}></Route>
                     <Route path='/dropdown-select' element={<DropdownSelect />}></Route>
                     <Route path='/counter' element={<Counter />}></Route>
