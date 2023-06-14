@@ -6,14 +6,20 @@ import Loader from '../components/UI/Loader'
 import { Button } from 'react-bootstrap';
 import Table from 'react-bootstrap/Table'
 import { ethers } from "ethers";
-const mintAbiArray = require('../abis/mintAbiArray')
+import { useNavigate } from 'react-router-dom';
+import Moment from 'react-moment'
+
+const mintAbiArray = require('../abis/mintAbiArray');
 
 const NftDetails = (props) => {
 
+    const navigate = useNavigate()
     const nft_id = useParams().nftid;
     const [nft, setNft] = useState()
     const [accounts, setAccount] = useState([]);
-    const [balance, setBalance] = useState()
+    const [balance, setBalance] = useState();
+    const [loader, setLoader] = useState(false);
+    const [transferHash, setTransferHash] = useState()
 
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
@@ -81,16 +87,19 @@ const NftDetails = (props) => {
     const buyNft = async () => {
 
         try {
+            setLoader(true)
             const decimals = 18;
             const input = (nft.price).toString(); // Note: this is a string, e.g. user input
             const amount = ethers.utils.parseUnits(input, decimals)
 
             console.log('amount', amount);
-            const result = await contract.connect(signer).transferNft(nft.minter, accounts, nft.token_id, amount, {
-                value: amount
-            })
+            // const result = await contract.connect(signer).transferNft(nft.minter, accounts, nft.token_id, amount, {
+            //     value: amount
+            // })
 
-            console.log('result', result);
+            // setTransferHash(result.hash)
+            setTransferHash('0xd7bfcf32b743556a809dbe832c8a1c10f10844d118f5432f2164ef78e261b231')
+            setLoader(false)
         }
 
         catch (e) {
@@ -104,7 +113,7 @@ const NftDetails = (props) => {
                 <td>{item.type.toUpperCase()}</td>
                 <td>{<a target="_blank" href={`https://mumbai.polygonscan.com/tx/${item.from}`}>{item.from.substring(0, 15) + '...'}</a>}</td>
                 <td>{<a target="_blank" href={`https://mumbai.polygonscan.com/tx/${item.to}`}>{item.to.substring(0, 15) + '...'}</a>}</td>
-                <td>{item.created}</td>
+                <td>{<Moment unix>{item.created}</Moment>}</td>
                 <td>{<a target="_blank" href={`https://mumbai.polygonscan.com/tx/${item.hash}`}>{item.hash.substring(0, 15) + '...'}</a>}</td>
             </tr>
         })
@@ -126,126 +135,173 @@ const NftDetails = (props) => {
                                 </Card>
                             </div>
                         </div>
-                        <div className={classes.right}>
-                            <div className={`${classes.price} + text-left mb-3`}>
-                                {nft.name}
-                            </div>
-                            <div className='text-left mb-5'>
-                                Owned by <a href={`https://mumbai.polygonscan.com/address/${nft.minter}`}>{nft.minter.substring(0, 15) + '...'}</a>
-                            </div>
-                            <div className='mb-5'>
+                        {
+                            (!transferHash && loader) &&
+                            <div className={classes.right}>
                                 <Card maxWidth='40rem' margin='unset'>
-                                    <div className='px-4 py-4 flex justify-between'>
-                                        <div style={{ width: '100%' }}>
-                                            <div className='text-left mb-3'>
-                                                <h5>Buy it at</h5>
+                                    <div style={{ 'padding': '20rem 0rem' }}>
+                                        <Loader ></Loader>
+                                    </div>
+                                </Card>
+                            </div>
+                        }
+                        {
+                            (!transferHash && !loader) &&
+                            <div className={classes.right}>
+                                <div className={`${classes.price} + text-left mb-3`}>
+                                    {nft.name}
+                                </div>
+                                <div className='text-left mb-5'>
+                                    Owned by <a href={`https://mumbai.polygonscan.com/address/${nft.minter}`}>{nft.minter.substring(0, 15) + '...'}</a>
+                                </div>
+                                <div className='mb-5'>
+                                    <Card maxWidth='40rem' margin='unset'>
+                                        <div className='px-4 py-4 flex justify-between'>
+                                            <div style={{ width: '100%' }}>
+                                                <div className='text-left mb-3'>
+                                                    <h5>Buy it at</h5>
+                                                </div>
+                                                <div className={`${classes.price} + text-left mb-3`}>
+                                                    {nft.price} MATIC
+                                                </div>
+                                                <div className='text-left'>
+                                                    <Button className={classes.btn} onClick={buyNft}>Buy</Button>
+                                                </div>
                                             </div>
-                                            <div className={`${classes.price} + text-left mb-3`}>
-                                                {nft.price} MATIC
+                                            <div className={classes.line}>
                                             </div>
-                                            <div className='text-left'>
-                                                <Button className={classes.btn} onClick={buyNft}>Buy</Button>
-                                            </div>
-                                        </div>
-                                        <div className={classes.line}>
-                                        </div>
-                                        <div style={{ width: '100%', margin: 'auto' }}>
-                                            <div className='mb-4' onClick={connectMetamask}>
-                                                {accounts.length === 0 && (<span style={{ 'cursor': 'pointer' }} onClick={connectMetamask}>Connect</span>)}
-                                                {accounts.length > 0 && (<span style={{ 'cursor': 'pointer' }}>{accounts.substring(0, 15) + '...'}</span>)}
-                                            </div>
-                                            <hr />
-                                            {accounts && <div className='flex justify-center mt-4'>
-                                                <img className='me-3' src="https://assets.seracle.com/polygon-matic.svg" style={{ maxWidth: '1.5rem' }} alt="" />
-                                                <span>{balance}</span>
-                                            </div>}
+                                            <div style={{ width: '100%', margin: 'auto' }}>
+                                                <div className='mb-4' onClick={connectMetamask}>
+                                                    {accounts.length === 0 && (<span style={{ 'cursor': 'pointer' }} onClick={connectMetamask}>Connect</span>)}
+                                                    {accounts.length > 0 && (<span style={{ 'cursor': 'pointer' }}>{accounts.substring(0, 15) + '...'}</span>)}
+                                                </div>
+                                                <hr />
+                                                {accounts && <div className='flex justify-center mt-4'>
+                                                    <img className='me-3' src="https://assets.seracle.com/polygon-matic.svg" style={{ maxWidth: '1.5rem' }} alt="" />
+                                                    <span>{balance}</span>
+                                                </div>}
 
+                                            </div>
+                                        </div>
+                                    </Card>
+                                </div>
+                                <div className='mb-5'>
+                                    <Card maxWidth='40rem' margin='unset'>
+                                        <div className='px-4 py-4 text-left'>
+                                            <h5>Description</h5>
+                                        </div>
+                                        <hr />
+                                        <div className='px-4 py-4'>
+                                            <p className='text-left'>
+                                                {nft.description}
+                                            </p>
+                                        </div>
+                                    </Card>
+                                </div>
+                                <div className='mb-5'>
+                                    <Card maxWidth='40rem' margin='unset'>
+                                        <div className='px-4 py-4 text-left'>
+                                            <h5>Details</h5>
+                                        </div>
+                                        <hr />
+                                        <div className='px-4 py-4'>
+                                            <div className="flex justify-between mb-3">
+                                                <div className={classes.key}>
+                                                    Contract Address
+                                                </div>
+                                                <div className={classes.value}>
+                                                    <a target="_blank" href={`https://mumbai.polygonscan.com/address/${nft.contract_address}`}>{nft.contract_address.substring(0, 15) + '...'}</a>
+                                                </div>
+                                            </div>
+                                            <div className="flex justify-between mb-3">
+                                                <div className={classes.key}>
+                                                    Token ID
+                                                </div>
+                                                <div className={classes.value}>
+                                                    {nft.token_id}
+                                                </div>
+                                            </div>
+                                            <div className="flex justify-between mb-3">
+                                                <div className={classes.key}>
+                                                    Token Standard
+                                                </div>
+                                                <div className={classes.value}>
+                                                    ERC-721
+                                                </div>
+                                            </div>
+                                            <div className="flex justify-between mb-3">
+                                                <div className={classes.key}>
+                                                    Chain
+                                                </div>
+                                                <div className={classes.value}>
+                                                    MUMBAI
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </Card>
+                                </div>
+                            </div>
+                        }
+                        {
+                            transferHash &&
+                            <div className={classes.right}>
+                                <Card maxWidth='30rem' margin='auto'>
+                                    <div className='px-5 py-5'>
+                                        <div className='flex justify-center mb-5'>
+                                            <img style={{ 'maxWidth': '11rem' }} src="https://assets.seracle.com/onlinegiftools.gif" alt="" />
+                                        </div>
+                                        <div className='mb-5'>
+                                            <h3>NFT Transferred</h3>
+                                        </div>
+                                        <div className='flex justify-between mb-2'>
+                                            <div>Transaction Hash</div>
+                                            <span>
+                                                <a target="_blank" href={`https://mumbai.polygonscan.com/tx/${transferHash}`}>{transferHash.substring(0, 15) + '...'}</a>
+                                            </span>
+                                        </div>
+                                        <div className='flex justify-between mb-5'>
+                                            <div>Contract Address</div>
+                                            <span>
+                                                <a target="_blank" href={`https://mumbai.polygonscan.com/address/${CONTRACT_ADDRESS}`}>{CONTRACT_ADDRESS.substring(0, 15) + '...'}</a>
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <Button onClick={() => navigate('/')}>Homepage</Button>
                                         </div>
                                     </div>
                                 </Card>
                             </div>
-                            <div className='mb-5'>
-                                <Card maxWidth='40rem' margin='unset'>
-                                    <div className='px-4 py-4 text-left'>
-                                        <h5>Description</h5>
-                                    </div>
-                                    <hr />
-                                    <div className='px-4 py-4'>
-                                        <p className='text-left'>
-                                            {nft.description}
-                                        </p>
-                                    </div>
-                                </Card>
-                            </div>
-                            <div className='mb-5'>
-                                <Card maxWidth='40rem' margin='unset'>
-                                    <div className='px-4 py-4 text-left'>
-                                        <h5>Details</h5>
-                                    </div>
-                                    <hr />
-                                    <div className='px-4 py-4'>
-                                        <div className="flex justify-between mb-3">
-                                            <div className={classes.key}>
-                                                Contract Address
-                                            </div>
-                                            <div className={classes.value}>
-                                                <a target="_blank" href={`https://mumbai.polygonscan.com/address/${nft.contract_address}`}>{nft.contract_address.substring(0, 15) + '...'}</a>
-                                            </div>
-                                        </div>
-                                        <div className="flex justify-between mb-3">
-                                            <div className={classes.key}>
-                                                Token ID
-                                            </div>
-                                            <div className={classes.value}>
-                                                {nft.token_id}
-                                            </div>
-                                        </div>
-                                        <div className="flex justify-between mb-3">
-                                            <div className={classes.key}>
-                                                Token Standard
-                                            </div>
-                                            <div className={classes.value}>
-                                                ERC-721
-                                            </div>
-                                        </div>
-                                        <div className="flex justify-between mb-3">
-                                            <div className={classes.key}>
-                                                Chain
-                                            </div>
-                                            <div className={classes.value}>
-                                                MUMBAI
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Card>
-                            </div>
-                        </div>
+                        }
                     </div>
                     <div>
-                        <div>
-                            {nft && <Card maxWidth='unset' margin='unset'>
-                                <div className='px-4 py-4 text-left'>
-                                    <h5>Activity</h5>
-                                </div>
-                                <hr />
-                                <div className='px-4 py-4'>
-                                    <Table>
-                                        <thead>
-                                            <tr>
-                                                <th>Event</th>
-                                                <th>From</th>
-                                                <th>To</th>
-                                                <th>Time</th>
-                                                <th>Tx</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {activity}
-                                        </tbody>
-                                    </Table>
-                                </div>
-                            </Card>}
-                        </div>
+                        {
+                            (!transferHash && !loader) &&
+                            <div>
+                                {nft && <Card maxWidth='unset' margin='unset'>
+                                    <div className='px-4 py-4 text-left'>
+                                        <h5>Activity</h5>
+                                    </div>
+                                    <hr />
+                                    <div className='px-4 py-4'>
+                                        <Table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Event</th>
+                                                    <th>From</th>
+                                                    <th>To</th>
+                                                    <th>Time</th>
+                                                    <th>Tx</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {activity}
+                                            </tbody>
+                                        </Table>
+                                    </div>
+                                </Card>}
+                            </div>
+                        }
+
                     </div>
                 </div>
             }
