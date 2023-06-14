@@ -14,7 +14,7 @@
 .btn{
     padding: 1rem 2rem !important;
     width: 100%;
-    max-width: 20rem;
+    max-width: 15rem;
 }
 
 p{
@@ -28,4 +28,9 @@ p{
     font-weight: 700;
     font-size: 1rem;
     color: rgb(100, 109, 117);
+}
+
+.line{
+    border-left: 1px solid lightseagreen;
+    opacity: 0.25;
 }
