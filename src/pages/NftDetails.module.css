@@ -34,3 +34,7 @@ p{
     border-left: 1px solid lightseagreen;
     opacity: 0.25;
 }
+
+table td{
+    padding: 1rem !important;
+}
