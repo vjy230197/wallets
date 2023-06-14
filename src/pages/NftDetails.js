@@ -107,6 +107,38 @@ const NftDetails = (props) => {
         }
     }
 
+    const updateOrder = async () => {
+        try {
+            const body = {
+                nft_id: nft_id,
+                address: accounts,
+                transaction_hash: transferHash,
+                current_owner: nft.current_owner
+            }
+
+            const response = await fetch("http://localhost:1234/buyNft", {
+                body: JSON.stringify(body),
+                method: 'POST',
+                headers: { "Content-Type": "application/json", 'platform': 'web' }
+            });
+
+            if (response.status === 200) {
+                console.log("order updated.");
+            } else {
+                console.error('Something went wrong');
+            }
+        }
+        catch (e) {
+            console.error(e);
+        }
+    }
+
+    useEffect(() => {
+        if (transferHash) {
+            updateOrder()
+        }
+    }, [transferHash])
+
     if (nft) {
         activity = nft.history.map((item, index) => {
             return <tr key={index}>
