@@ -4,7 +4,7 @@ import { Button } from 'react-bootstrap';
 
 function NavBar() {
     const navigate = useNavigate()
-    const style = { 'backdropFilter': 'blur(10px)', 'top': '1rem', 'margin': 'auto', 'maxWidth': '85%', 'position': 'sticky', 'zIndex': '1000' }
+    const style = { 'backdropFilter': 'blur(10px)', 'top': '1rem', 'margin': 'auto', 'maxWidth': '85%', 'position': 'sticky', 'zIndex': '19' }
 
     return (
         <div className='bg-white text-black px-10 py-3 border border-white-500 rounded-lg relative' style={style}>
