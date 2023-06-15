@@ -37,7 +37,7 @@ const Home = () => {
                 <div className='flex justify-between px-3 py-3'>
                     <div style={{ 'margin': 'auto 0', 'fontSize': '13px' }}>
                         Price <span className='ms-1'>
-                            {nft.price} MATIC
+                            {nft.current_price} MATIC
                         </span>
                     </div>
                     <div>

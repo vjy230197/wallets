@@ -8,11 +8,11 @@ function NavBar() {
 
     return (
         <div className='bg-white text-black px-10 py-3 border border-white-500 rounded-lg relative' style={style}>
-            <div className='flex justify-between'>
-                <h4 style={{ 'cursor': 'pointer' }} onClick={() => navigate('/')}>Home</h4>
-                <h4 style={{ 'cursor': 'pointer' }} onClick={() => navigate('/mint')}>Mint</h4>
-                <h4 style={{ 'cursor': 'pointer' }} onClick={() => navigate('/created')}>Created</h4>
-                <h4 style={{ 'cursor': 'pointer' }} onClick={() => navigate('/collected')}>Collected</h4>
+            <div className='flex justify-between align-items-center'>
+                <span style={{ 'cursor': 'pointer' }} onClick={() => navigate('/')}>Home</span>
+                <span style={{ 'cursor': 'pointer' }} onClick={() => navigate('/mint')}>Mint</span>
+                <span style={{ 'cursor': 'pointer' }} onClick={() => navigate('/created')}>Created</span>
+                <span style={{ 'cursor': 'pointer' }} onClick={() => navigate('/collected')}>Collected</span>
                 <Button onClick={() => navigate('/wallets')}>Wallets</Button>
             </div>
         </div>

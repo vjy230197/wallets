@@ -89,7 +89,7 @@ const NftDetails = (props) => {
         try {
             setLoader(true)
             const decimals = 18;
-            const input = (nft.price).toString(); // Note: this is a string, e.g. user input
+            const input = (nft.current_price).toString(); // Note: this is a string, e.g. user input
             const amount = ethers.utils.parseUnits(input, decimals)
 
             const result = await contract.connect(signer).transferNft(nft.minter, accounts, nft.token_id, amount, {
@@ -218,7 +218,7 @@ const NftDetails = (props) => {
                                                             <h5>Buy it at</h5>
                                                         </div>
                                                         <div className={`${classes.price} + text-left mb-3`}>
-                                                            {nft.price} MATIC
+                                                            {nft.current_price} MATIC
                                                         </div>
                                                         <div className='text-left'>
                                                             <Button className={classes.btn} onClick={buyNft}>Buy</Button>
