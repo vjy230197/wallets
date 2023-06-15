@@ -11,7 +11,7 @@ function NavBar() {
             <div className='flex justify-between'>
                 <h4 style={{ 'cursor': 'pointer' }} onClick={() => navigate('/')}>Home</h4>
                 <h4 style={{ 'cursor': 'pointer' }} onClick={() => navigate('/mint')}>Mint</h4>
-                <Button onClick={() => navigate('/wallets')}>Connect</Button>
+                <Button onClick={() => navigate('/wallets')}>Wallets</Button>
             </div>
         </div>
     )
