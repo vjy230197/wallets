@@ -11,6 +11,7 @@ import Timer from './components/Timer/Timer';
 import ManualCounter from './components/Counter/ManualCounter';
 import Mint from './components/Mint/Mint';
 import NftDetails from './pages/NftDetails';
+import Collected from './components/Collected/Collected';
 
 function App() {
     return (
@@ -21,6 +22,7 @@ function App() {
                     <Route path='/' element={<Home />}></Route>
                     <Route path='/wallets' element={<Wallets />}></Route>
                     <Route path='/mint' element={<Mint />}></Route>
+                    <Route path='/collected' element={<Collected />}></Route>
                     <Route path='/nftdetails/:nftid' element={<NftDetails />}></Route>
                     {/* <Route path='/tasks' element={<Todo />}></Route>
                     <Route path='/dropdown-select' element={<DropdownSelect />}></Route>

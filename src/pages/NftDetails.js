@@ -158,8 +158,6 @@ const NftDetails = (props) => {
         })
     }
 
-
-
     return (
         <>
             {
@@ -191,21 +189,58 @@ const NftDetails = (props) => {
                                     {nft.name}
                                 </div>
                                 <div className='text-left mb-5'>
-                                    Owned by <a target="_blank" href={`https://mumbai.polygonscan.com/address/${nft.current_owner}`}>{nft.current_owner}</a>
+                                    {accounts !== nft.current_owner &&
+                                        <div>
+                                            Owned by <a target="_blank" href={`https://mumbai.polygonscan.com/address/${nft.current_owner}`}>{nft.current_owner}</a>
+                                        </div>
+                                    }
+                                    {
+                                        accounts === nft.current_owner && accounts !== nft.minter &&
+                                        <div>
+                                            You own this.
+                                        </div>
+                                    }
+                                    {
+                                        accounts === nft.minter &&
+                                        <div>
+                                            You minted this.
+                                        </div>
+                                    }
                                 </div>
                                 <div className='mb-5'>
                                     <Card maxWidth='40rem' margin='unset'>
                                         <div className='px-4 py-4 flex justify-between'>
-                                            <div style={{ width: '100%' }}>
-                                                <div className='text-left mb-3'>
-                                                    <h5>Buy it at</h5>
-                                                </div>
-                                                <div className={`${classes.price} + text-left mb-3`}>
-                                                    {nft.price} MATIC
-                                                </div>
-                                                <div className='text-left'>
-                                                    <Button className={classes.btn} onClick={buyNft}>Buy</Button>
-                                                </div>
+                                            <div style={{ width: '100%', 'margin': 'auto' }}>
+                                                {
+                                                    accounts !== nft.current_owner &&
+                                                    <div>
+                                                        <div className='text-left mb-3'>
+                                                            <h5>Buy it at</h5>
+                                                        </div>
+                                                        <div className={`${classes.price} + text-left mb-3`}>
+                                                            {nft.price} MATIC
+                                                        </div>
+                                                        <div className='text-left'>
+                                                            <Button className={classes.btn} onClick={buyNft}>Buy</Button>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                {
+                                                    accounts === nft.current_owner && accounts !== nft.minter &&
+                                                    <div>
+                                                        <div className='text-left'>
+                                                            <Button className={classes.btn} disabled='true'>Sell Now</Button>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                {
+                                                    accounts === nft.minter &&
+                                                    <div>
+                                                        <div className='text-left'>
+                                                            <Button className={classes.btn} disabled='true'>Disable</Button>
+                                                        </div>
+                                                    </div>
+                                                }
                                             </div>
                                             <div className={classes.line}>
                                             </div>

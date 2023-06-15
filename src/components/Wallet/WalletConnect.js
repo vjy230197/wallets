@@ -3,6 +3,7 @@ import { Web3Modal } from '@web3modal/standalone';
 import { useEffect } from "react";
 import React, { useState } from 'react';
 import wc from '../../Assets/wc.png'
+import { Button } from 'react-bootstrap';
 
 function WalletConnect() {
     const [signClient, setSignClient] = useState();
@@ -105,7 +106,7 @@ function WalletConnect() {
             createClient();
     }, [signClient]);
 
-    const style = { 'margin': 'auto', 'max-width': '7rem', 'margin-bottom': '1rem' }
+    const style = { 'margin': 'auto', 'maxWidth': '7rem', 'marginBottom': '1rem' }
 
     return (
 
@@ -115,7 +116,7 @@ function WalletConnect() {
                 <button onClick={handleDisconnect}>Disconnect</button>
             </>) : <div>
                 <img src={wc} style={style}></img>
-                <button className='bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded' onClick={handleConnect} disabled={!signClient}>WalletConnect</button>
+                <Button onClick={handleConnect} disabled={!signClient}>WalletConnect</Button>
 
             </div>}
         </div>

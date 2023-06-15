@@ -25,7 +25,7 @@ const Home = () => {
     }, [])
 
     const result = nfts.map((nft, index) => {
-        return <Card style={{ 'margin-bottom': '5rem' }} item={nft} key={index} maxWidth='20rem' >
+        return <Card style={{ 'marginBottom': '5rem' }} item={nft} key={index} maxWidth='20rem' >
             <div style={{ cursor: 'pointer' }} onClick={() => { navigate(`/nftdetails/${nft.nft_id}`) }}>
                 <div className={classes.zoom_effect}>
                     <img src={nft.image} alt="" />

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Sign from './Sign';
+import { Button } from 'react-bootstrap';
 
 function Metamask() {
     const [accounts, setAccount] = useState([]);
@@ -37,7 +38,7 @@ function Metamask() {
         setSignature(sign)
     }
 
-    const style = { 'margin': 'auto', 'max-width': '7rem', 'margin-bottom': '1rem' }
+    const style = { 'margin': 'auto', 'maxWidth': '7rem', 'marginBottom': '1rem' }
 
     return (
         <div>
@@ -46,13 +47,13 @@ function Metamask() {
                     {!signature && <Sign onSign={handleSign} />}
                     {signature && <div>
                         <h5 className='mb-5'>{accounts.substring(0, 15) + '...'}</h5>
-                        <button onClick={handleDisconnect}>Disconnect</button>
+                        <Button onClick={handleDisconnect}>Disconnect</Button>
                     </div>}
 
                 </>) :
                 <div>
                     <img src='https://assets.seracle.com/metamask.png' style={style}></img>
-                    <button className='bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded' onClick={connectMetamask} >Metamask</button>
+                    <Button onClick={connectMetamask} >Metamask</Button>
 
                 </div>}
         </div>
