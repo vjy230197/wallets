@@ -92,17 +92,17 @@ const NftDetails = (props) => {
             const input = (nft.price).toString(); // Note: this is a string, e.g. user input
             const amount = ethers.utils.parseUnits(input, decimals)
 
-            console.log('amount', amount);
-            // const result = await contract.connect(signer).transferNft(nft.minter, accounts, nft.token_id, amount, {
-            //     value: amount
-            // })
+            const result = await contract.connect(signer).transferNft(nft.minter, accounts, nft.token_id, amount, {
+                value: amount
+            })
 
-            // setTransferHash(result.hash)
-            setTransferHash('0xd7bfcf32b743556a809dbe832c8a1c10f10844d118f5432f2164ef78e261b231')
+            setTransferHash(result.hash)
+            // setTransferHash('0xd7bfcf32b743556a809dbe832c8a1c10f10844d118f5432f2164ef78e261b231')
             setLoader(false)
         }
 
         catch (e) {
+            setLoader(false)
             console.log(e);
         }
     }
@@ -145,7 +145,14 @@ const NftDetails = (props) => {
                 <td>{item.type.toUpperCase()}</td>
                 <td>{<a target="_blank" href={`https://mumbai.polygonscan.com/tx/${item.from}`}>{item.from.substring(0, 15) + '...'}</a>}</td>
                 <td>{<a target="_blank" href={`https://mumbai.polygonscan.com/tx/${item.to}`}>{item.to.substring(0, 15) + '...'}</a>}</td>
-                <td>{<Moment unix>{item.created}</Moment>}</td>
+                <td>{new Date(item.created).toLocaleString(
+                    "en-US",
+                    {
+                        month: "short",
+                        day: "2-digit",
+                        year: "numeric",
+                    }
+                )}</td>
                 <td>{<a target="_blank" href={`https://mumbai.polygonscan.com/tx/${item.hash}`}>{item.hash.substring(0, 15) + '...'}</a>}</td>
             </tr>
         })
@@ -184,7 +191,7 @@ const NftDetails = (props) => {
                                     {nft.name}
                                 </div>
                                 <div className='text-left mb-5'>
-                                    Owned by <a href={`https://mumbai.polygonscan.com/address/${nft.minter}`}>{nft.minter.substring(0, 15) + '...'}</a>
+                                    Owned by <a target="_blank" href={`https://mumbai.polygonscan.com/address/${nft.current_owner}`}>{nft.current_owner}</a>
                                 </div>
                                 <div className='mb-5'>
                                     <Card maxWidth='40rem' margin='unset'>

@@ -18,10 +18,12 @@ const Mint = () => {
     const [mintHash, setMintHash] = useState()
 
     const [accounts, setAccount] = useState([]);
+    const [balance, setBalance] = useState();
 
     const [loader, setLoader] = useState(false)
     const [hideSubmit, setHideSubmit] = useState(true)
 
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
     const CONTRACT_ADDRESS = '0x56716b82f27a6c71CCb7Cc7cDFC1549f408407a8'
 
     const sumbit = async event => {
@@ -49,23 +51,27 @@ const Mint = () => {
         } else {
             console.error('Something went wrong');
         }
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
 
-        // const balance = await provider.getBalance(address);
-        // const nativeBalance = ethers.utils.formatEther(balance);
+        try {
+            const signer = provider.getSigner();
 
-        const signer = provider.getSigner();
+            const contract = new ethers.Contract(CONTRACT_ADDRESS, mintAbiArray, signer);
 
-        const contract = new ethers.Contract(CONTRACT_ADDRESS, mintAbiArray, signer);
+            const result = await contract.connect(signer).mintNft(accounts, metadataUri)
 
-        const result = await contract.connect(signer).mintNft(accounts, metadataUri)
+            setLoader(false)
 
-        setLoader(false)
+            const tx = await provider.getTransactionReceipt(result.hash);
 
-        const tx = await provider.getTransactionReceipt(result.hash);
+            console.log('tx', tx);
+            setMintHash(result.hash)
+        }
 
-        console.log('tx', tx);
-        setMintHash(result.hash)
+        catch (e) {
+            setLoader(false)
+            console.error(e);
+        }
+
     }
 
     const addNft = async () => {
@@ -150,8 +156,13 @@ const Mint = () => {
         }
     }
 
-    const accountChangedHandler = (account) => {
+    const accountChangedHandler = async (account) => {
         setAccount(account)
+
+        const balance = await provider.getBalance(account);
+        const nativeBalance = ethers.utils.formatEther(balance);
+
+        await setBalance(nativeBalance)
     }
 
     return (
@@ -163,7 +174,15 @@ const Mint = () => {
                     {(!mintHash && !loader) && <div>
                         <div className='flex justify-end'>
                             {accounts.length === 0 && (<h5 style={{ 'cursor': 'pointer' }} onClick={connectMetamask}>Connect</h5>)}
-                            {accounts.length > 0 && (<h5 style={{ 'cursor': 'pointer' }}>{accounts.substring(0, 7) + '...'}</h5>)}
+                            {accounts.length > 0 && (
+                                <div>
+                                    <h5 style={{ 'cursor': 'pointer' }}>{accounts.substring(0, 7) + '...'}</h5>
+                                    <div className='flex justify-center align-middle mt-1' style={{ fontSize: '10px' }}>
+                                        <span className='me-2'>{balance}</span>
+                                        <span><img style={{ maxWidth: '12px' }} src="https://assets.seracle.com/polygon-matic.svg" alt="" /></span>
+                                    </div>
+                                </div>
+                            )}
                         </div>
 
                         <div className='mb-3'>
