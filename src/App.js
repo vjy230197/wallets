@@ -13,6 +13,7 @@ import Mint from './components/Mint/Mint';
 import NftDetails from './pages/NftDetails';
 import Collected from './components/Collected/Collected';
 import Created from './components/Created/Created';
+import ContractForm from './components/Contract/ContractForm';
 
 function App() {
     return (
@@ -26,6 +27,9 @@ function App() {
                     <Route path='/collected' element={<Collected />}></Route>
                     <Route path='/created' element={<Created />}></Route>
                     <Route path='/nftdetails/:nftid' element={<NftDetails />}></Route>
+                    <Route path='/contractForm' element={<ContractForm />}></Route>
+
+
                     {/* <Route path='/tasks' element={<Todo />}></Route>
                     <Route path='/dropdown-select' element={<DropdownSelect />}></Route>
                     <Route path='/counter' element={<Counter />}></Route>
