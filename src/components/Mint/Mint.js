@@ -207,9 +207,18 @@ const Mint = () => {
 
                         <div className='mb-5'>
                             <label className={`${classes.label} + mb-3`}>NFT Image</label>
-                            <input type="file" className='me-3 ps-3' onChange={fileUpload} />
+                            {/* <input type="file" className='me-3 ps-3' onChange={fileUpload} />
 
-                            <img className='mt-3 rounded-lg' src={previewImage} />
+                            <img className='mt-3 rounded-lg' src={previewImage} /> */}
+                            <div className={classes.logo_wrapper}>
+                                <div className={`${classes.box} + mb-3`}>
+                                    {imageUrl && <img src={imageUrl} alt="" />}
+                                    {!imageUrl && <input className={classes.input_file} type="file" onChange={fileUpload} />}
+                                </div>
+                                <div>
+                                    350 x 350 px recommended
+                                </div>
+                            </div>
                         </div>
 
                         <div className="text-center">
