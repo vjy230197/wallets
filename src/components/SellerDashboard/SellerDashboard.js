@@ -6,6 +6,8 @@ import Tabs from "@material-ui/core/Tabs";
 import classes from './SellerDashboard.module.css';
 import Collection from './Collections/Collection';
 import Mint from '../Mint/Mint'
+import Created from '../Created/Created'
+import Collected from './Collected/Collected'
 
 const SelletDashboard = () => {
 
@@ -39,6 +41,12 @@ const SelletDashboard = () => {
                     }
                     {
                         value == 1 && <Mint />
+                    }
+                    {
+                        value == 2 && <Created />
+                    }
+                    {
+                        value == 3 && <Collected />
                     }
                 </div>
             </div>

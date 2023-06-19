@@ -10,10 +10,12 @@ function NavBar() {
         <div className='bg-white text-black px-10 py-3 border border-white-500 rounded-lg relative' style={style}>
             <div className='flex justify-between align-items-center'>
                 <span style={{ 'cursor': 'pointer' }} onClick={() => navigate('/')}>Home</span>
-                <span style={{ 'cursor': 'pointer' }} onClick={() => navigate('/mint')}>Mint</span>
-                <span style={{ 'cursor': 'pointer' }} onClick={() => navigate('/created')}>Created</span>
+                {/* <span style={{ 'cursor': 'pointer' }} onClick={() => navigate('/created')}>Created</span> */}
                 {/* <span style={{ 'cursor': 'pointer' }} onClick={() => navigate('/collected')}>Collected</span> */}
-                <span style={{ 'cursor': 'pointer' }} onClick={() => navigate('/contractForm')}>ContractForm</span>
+                {/* <span style={{ 'cursor': 'pointer' }} onClick={() => navigate('/contractForm')}>ContractForm</span> */}
+                <span></span>
+                <span></span>
+                <span></span>
                 <span style={{ 'cursor': 'pointer' }} onClick={() => navigate('/dashboard')}>Dashboard</span>
                 <Button onClick={() => navigate('/wallets')}>Wallets</Button>
             </div>
