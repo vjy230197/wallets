@@ -18,14 +18,32 @@ label {
   font-weight: bold;
   font-size: 12px;
 }
-.input,
-textarea {
+
+.input {
   background: white;
   outline: none;
-  padding: 1rem 1rem;
-  border: 1px solid;
-  border-radius: 5px;
+  cursor: text;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  border-radius: 12px;
+  border: 1px solid rgb(229, 232, 235);
+  color: rgb(4, 17, 29);
+  font-family: __Inter_6faf11, __Inter_Fallback_6faf11, sans-serif;
   width: 100%;
+  padding: 12px;
+  height: 48px;
+  font-size: 16px;
+}
+
+.textarea {
+  width: 100%;
+  height: auto;
+  padding: 12px;
+  resize: vertical;
+  border: 1px solid rgb(229, 232, 235);
+  background-color: transparent;
+  border-radius: 10px;
 }
 
 .input::-webkit-outer-spin-button,
@@ -41,5 +59,11 @@ textarea {
 
 span img {
   width: 100%;
-  max-width: 2rem;
+  max-width: 1.5rem;
+}
+
+.label {
+  font-weight: 600;
+  font-size: 1rem;
+  display: flex;
 }

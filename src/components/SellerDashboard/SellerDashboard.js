@@ -5,6 +5,7 @@ import Tab from "@material-ui/core/Tab";
 import Tabs from "@material-ui/core/Tabs";
 import classes from './SellerDashboard.module.css';
 import Collection from './Collections/Collection';
+import Mint from '../Mint/Mint'
 
 const SelletDashboard = () => {
 
@@ -34,7 +35,10 @@ const SelletDashboard = () => {
 
                 <div>
                     {
-                        value == 0 && <Collection></Collection>
+                        value == 0 && <Collection />
+                    }
+                    {
+                        value == 1 && <Mint />
                     }
                 </div>
             </div>

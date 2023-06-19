@@ -186,14 +186,14 @@ const Mint = () => {
                         </div>
 
                         <div className='mb-3'>
-                            <label className='flex py-2'>NFT Name</label>
+                            <label className={`${classes.label} + mb-3`}>NFT Name</label>
                             <input value={name} type="text" className={`${classes.input} + me-3 ps-3`} onChange={nameChangeHandler} />
                         </div>
 
                         <div className='mb-3'>
-                            <label className='flex py-2'>Price</label>
+                            <label className={`${classes.label} + mb-3`}>Price</label>
                             <div style={{ 'position': 'relative' }}>
-                                <input value={price} type="number" className='me-3 ps-3' onChange={priceChangeHandler} />
+                                <input value={price} type="number" className={classes.input} onChange={priceChangeHandler} />
                                 <span style={{ 'position': 'absolute', 'top': '12px', 'right': '1rem' }}>
                                     <img src="https://assets.seracle.com/polygon-matic.svg" alt="" />
                                 </span>
@@ -201,12 +201,12 @@ const Mint = () => {
                         </div>
 
                         <div className='mb-3'>
-                            <label className='flex py-2'>Description</label>
-                            <textarea value={description} cols="5" rows='5' className='me-3 ps-3' onChange={descriptionChangeHandler} />
+                            <label className={`${classes.label} + mb-3`}>Description</label>
+                            <textarea value={description} cols="5" rows='5' className={classes.textarea} onChange={descriptionChangeHandler} />
                         </div>
 
                         <div className='mb-5'>
-                            <label className='flex py-2'>NFT Image</label>
+                            <label className={`${classes.label} + mb-3`}>NFT Image</label>
                             <input type="file" className='me-3 ps-3' onChange={fileUpload} />
 
                             <img className='mt-3 rounded-lg' src={previewImage} />
