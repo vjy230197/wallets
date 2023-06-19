@@ -9,38 +9,12 @@ import Loader from '../../UI/Loader'
 const Collected = () => {
     const navigate = useNavigate();
 
-    const [accounts, setAccount] = useState([]);
-    const [balance, setBalance] = useState();
+    let accounts = localStorage.getItem('address');
+
     const [nfts, setNfts] = useState([])
     const [loader, setLoader] = useState(false)
 
     const provider = new ethers.providers.Web3Provider(window.ethereum);
-
-    const connectMetamask = () => {
-        if (window.ethereum) {
-
-            window.ethereum.request({
-                method: 'eth_requestAccounts'
-            }).then((result) => {
-                accountChangedHandler(result[0])
-
-            }).catch((error) => {
-                console.error(error);
-            });
-        }
-        else {
-            console.log('no metamask installed.');
-        }
-    }
-
-    const accountChangedHandler = async (account) => {
-        setAccount(account)
-
-        const balance = await provider.getBalance(account);
-        const nativeBalance = ethers.utils.formatEther(balance);
-
-        await setBalance(nativeBalance)
-    }
 
     const collectedNfts = async () => {
         setLoader(true)
@@ -64,9 +38,8 @@ const Collected = () => {
     }
 
     useEffect(() => {
-        if (accounts.length > 0)
-            collectedNfts()
-    }, [accounts])
+        collectedNfts()
+    }, [])
 
 
     const result = nfts.map((nft, index) => {
@@ -93,25 +66,12 @@ const Collected = () => {
         </Card>
     })
 
-
     return (
         <>
             <div className={classes.buyer}>
-                <div className='flex justify-end mb-5'>
-                    {accounts.length === 0 && (<h5 style={{ 'cursor': 'pointer' }} onClick={connectMetamask}>Connect</h5>)}
-                    {accounts.length > 0 && (
-                        <div>
-                            <h5 style={{ 'cursor': 'pointer' }}>{localStorage.getItem('address').substring(0, 6) + '...' + localStorage.getItem('address').substring(localStorage.getItem('address').length - 4, localStorage.getItem('address').length)}</h5>
-                            <div className='flex justify-center align-middle mt-1' style={{ fontSize: '10px' }}>
-                                <span className='me-2'>{balance}</span>
-                                <span><img style={{ maxWidth: '12px' }} src="https://assets.seracle.com/polygon-matic.svg" alt="" /></span>
-                            </div>
-                        </div>
-                    )}
-                </div>
                 <div>
                     {
-                        !loader && accounts.length > 0 && nfts.length === 0 &&
+                        !loader && nfts.length === 0 &&
                         <Card maxWidth='25rem' margin='auto'>
                             <div style={{ padding: '7rem' }}>
                                 <div className="mb-5">

@@ -1,24 +1,24 @@
-.buyer{
-    padding: 7rem 15rem;
+.buyer {
+  padding: 7rem 8rem;
 }
 
 .zoom_effect {
-    position: relative;
-    overflow: hidden;
-    border-top-left-radius: 1rem;
-    border-top-right-radius: 1rem;
-    padding: 2px;
+  position: relative;
+  overflow: hidden;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+  padding: 2px;
 }
 
 .zoom_effect img {
-    width: 100%;
-    max-width: 25rem;
-    height: 25rem;
-    -webkit-transition: all 0.7s ease;
-    transition: all 0.7s ease;
+  width: 100%;
+  max-width: 25rem;
+  height: 25rem;
+  -webkit-transition: all 0.7s ease;
+  transition: all 0.7s ease;
 }
 
 .zoom_effect img:hover {
-    -webkit-transform: scale(1.05);
-    transform: scale(1.05);
+  -webkit-transform: scale(1.05);
+  transform: scale(1.05);
 }
