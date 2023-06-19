@@ -187,7 +187,7 @@ const Mint = () => {
 
                         <div className='mb-3'>
                             <label className='flex py-2'>NFT Name</label>
-                            <input value={name} type="text" className='me-3 ps-3' onChange={nameChangeHandler} />
+                            <input value={name} type="text" className={`${classes.input} + me-3 ps-3`} onChange={nameChangeHandler} />
                         </div>
 
                         <div className='mb-3'>

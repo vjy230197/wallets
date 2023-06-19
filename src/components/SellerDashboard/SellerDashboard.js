@@ -4,7 +4,7 @@ import Paper from "@material-ui/core/Paper";
 import Tab from "@material-ui/core/Tab";
 import Tabs from "@material-ui/core/Tabs";
 import classes from './SellerDashboard.module.css';
-import Collected from './Collected/Collected';
+import Collection from './Collections/Collection';
 
 const SelletDashboard = () => {
 
@@ -14,6 +14,7 @@ const SelletDashboard = () => {
         <>
             <Dashboard />
             <div className={classes.seller_dashboard}>
+
                 <Paper style={{ 'background': 'inherit', 'boxShadow': 'none' }}>
                     <Tabs
                         value={value}
@@ -23,16 +24,18 @@ const SelletDashboard = () => {
                             setValue(newValue);
                         }}
                     >
-                        <Tab label="Collected" />
-                        <Tab label="Created" />
+                        <Tab label="Collections" className='me-3' />
+                        <Tab label="Create NFT" />
 
                     </Tabs>
                 </Paper>
-                {/* <div>
+                <hr style={{ 'borderBottom': '1px solid lightseagreen', 'opacity': 0.25 }} />
+
+                <div>
                     {
-                        value == 0 && <Collected></Collected>
+                        value == 0 && <Collection></Collection>
                     }
-                </div> */}
+                </div>
             </div>
         </>
     )

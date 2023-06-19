@@ -7,38 +7,39 @@
   background-color: white;
 }
 
-.row{
-    width: 100%;
-    max-width: 20rem;
-    display: flex;
-    flex-direction: column;
-    margin: auto;
+.row {
+  width: 100%;
+  max-width: 20rem;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
 }
-label{
-    font-weight: bold;
-    font-size: 12px;
+label {
+  font-weight: bold;
+  font-size: 12px;
 }
-input, textarea {
-    background: white;
-    outline: none;
-    padding: 1rem 1rem;
-    border: 1px solid;
-    border-radius: 5px;
-    width: 100%;
+.input,
+textarea {
+  background: white;
+  outline: none;
+  padding: 1rem 1rem;
+  border: 1px solid;
+  border-radius: 5px;
+  width: 100%;
 }
 
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
+.input::-webkit-outer-spin-button,
+.input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
 /* Firefox */
-input[type=number] {
+.input[type="number"] {
   -moz-appearance: textfield;
 }
 
-span img{
-    width: 100%;
-    max-width: 2rem;
+span img {
+  width: 100%;
+  max-width: 2rem;
 }

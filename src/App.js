@@ -15,6 +15,7 @@ import NftDetails from './pages/NftDetails';
 import Created from './components/Created/Created';
 import ContractForm from './components/Contract/ContractForm';
 import SellerDashboard from './components/SellerDashboard/SellerDashboard';
+import AddCollection from './components/SellerDashboard/Collections/AddCollection';
 
 function App() {
     return (
@@ -30,9 +31,7 @@ function App() {
                     <Route path='/nftdetails/:nftid' element={<NftDetails />}></Route>
                     <Route path='/contractForm' element={<ContractForm />}></Route>
                     <Route path='/dashboard' element={<SellerDashboard />}></Route>
-
-                    SelletDashboard
-
+                    <Route path='/addCollection' element={<AddCollection />}></Route>
 
                     {/* <Route path='/tasks' element={<Todo />}></Route>
                     <Route path='/dropdown-select' element={<DropdownSelect />}></Route>
