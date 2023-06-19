@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import classes from '../Collected/Collected.module.css'
+import classes from './Created.module.css'
 import { ethers } from "ethers";
 import Card from '../UI/Card';
 import { Button } from 'react-bootstrap';

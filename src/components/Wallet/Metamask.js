@@ -25,6 +25,8 @@ function Metamask() {
 
     const accountChangedHandler = (account) => {
         setAccount(account)
+
+        localStorage.setItem('address', account)
     }
 
     const handleDisconnect = () => {

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import classes from './Collected.module.css'
 import { ethers } from "ethers";
-import Card from '../UI/Card';
+import Card from '../../UI/Card';
 import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import Loader from '../UI/Loader'
+import Loader from '../../UI/Loader'
 
 const Collected = () => {
     const navigate = useNavigate();
@@ -101,7 +101,7 @@ const Collected = () => {
                     {accounts.length === 0 && (<h5 style={{ 'cursor': 'pointer' }} onClick={connectMetamask}>Connect</h5>)}
                     {accounts.length > 0 && (
                         <div>
-                            <h5 style={{ 'cursor': 'pointer' }}>{accounts.substring(0, 7) + '...'}</h5>
+                            <h5 style={{ 'cursor': 'pointer' }}>{localStorage.getItem('address').substring(0, 6) + '...' + localStorage.getItem('address').substring(localStorage.getItem('address').length - 4, localStorage.getItem('address').length)}</h5>
                             <div className='flex justify-center align-middle mt-1' style={{ fontSize: '10px' }}>
                                 <span className='me-2'>{balance}</span>
                                 <span><img style={{ maxWidth: '12px' }} src="https://assets.seracle.com/polygon-matic.svg" alt="" /></span>

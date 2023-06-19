@@ -7,7 +7,6 @@ import { Button } from 'react-bootstrap';
 import Table from 'react-bootstrap/Table'
 import { ethers } from "ethers";
 import { useNavigate } from 'react-router-dom';
-import Moment from 'react-moment'
 
 const mintAbiArray = require('../abis/mintAbiArray');
 

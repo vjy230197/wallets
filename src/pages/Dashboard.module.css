@@ -1,0 +1,69 @@
+.dashboard {
+  position: relative;
+  bottom: 5rem;
+}
+
+.banner {
+  height: 25rem;
+  width: 100%;
+  animation-duration: 2.5s;
+  animation-fill-mode: forwards;
+  animation-name: shimmer;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  border-radius: inherit;
+  background: linear-gradient(
+      to right,
+      rgba(229, 232, 235, 0.5) 8%,
+      rgb(229, 232, 235) 36%,
+      rgba(229, 232, 235, 0.5) 66%
+    )
+    0% 0% / 1200px;
+  cursor: pointer;
+}
+
+.banner:hover {
+  background: lightgray;
+}
+
+.body {
+  padding: 0 8rem;
+}
+
+.user_card {
+  max-width: 25rem;
+  position: relative;
+  bottom: 5rem;
+}
+
+.user_wrapper {
+  max-width: 10rem;
+  height: 10rem;
+  background: white;
+  padding: 5px;
+  border-radius: 100%;
+  cursor: pointer;
+}
+
+.user_card img {
+  max-width: 14px;
+}
+
+.user {
+  height: 100%;
+  width: 100%;
+  border-radius: 1rem;
+  border-radius: inherit;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  background: url("https://storage.googleapis.com/opensea-static/opensea-profile/28.png");
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1200px 0px;
+  }
+
+  100% {
+    background-position: 1200px 0px;
+  }
+}

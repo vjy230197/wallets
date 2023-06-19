@@ -11,9 +11,10 @@ import Timer from './components/Timer/Timer';
 import ManualCounter from './components/Counter/ManualCounter';
 import Mint from './components/Mint/Mint';
 import NftDetails from './pages/NftDetails';
-import Collected from './components/Collected/Collected';
+// import Collected from './components/SellerDashboard/Collected/Collected';
 import Created from './components/Created/Created';
 import ContractForm from './components/Contract/ContractForm';
+import SellerDashboard from './components/SellerDashboard/SellerDashboard';
 
 function App() {
     return (
@@ -24,10 +25,13 @@ function App() {
                     <Route path='/' element={<Home />}></Route>
                     <Route path='/wallets' element={<Wallets />}></Route>
                     <Route path='/mint' element={<Mint />}></Route>
-                    <Route path='/collected' element={<Collected />}></Route>
+                    {/* <Route path='/collected' element={<Collected />}></Route> */}
                     <Route path='/created' element={<Created />}></Route>
                     <Route path='/nftdetails/:nftid' element={<NftDetails />}></Route>
                     <Route path='/contractForm' element={<ContractForm />}></Route>
+                    <Route path='/dashboard' element={<SellerDashboard />}></Route>
+
+                    SelletDashboard
 
 
                     {/* <Route path='/tasks' element={<Todo />}></Route>
