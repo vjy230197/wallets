@@ -14,8 +14,6 @@ const Collected = () => {
     const [nfts, setNfts] = useState([])
     const [loader, setLoader] = useState(false)
 
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-
     const collectedNfts = async () => {
         setLoader(true)
         const body = {
