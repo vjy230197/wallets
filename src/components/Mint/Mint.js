@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import classes from './Mint.module.css'
 import { Button } from 'react-bootstrap';
 import { ethers } from "ethers";
@@ -9,7 +9,6 @@ const mintAbiArray = require('../../abis/mintAbiArray')
 const Mint = () => {
     const navigate = useNavigate();
 
-    const [previewImage, setPreviewImage] = useState()
     const [imageUrl, setImageUrl] = useState();
     const [metadataUri, setMetadataUri] = useState('');
     const [name, setName] = useState('');
@@ -17,7 +16,6 @@ const Mint = () => {
     const [description, setDescription] = useState('');
     const [mintHash, setMintHash] = useState()
 
-    const [accounts, setAccount] = useState([]);
     const [balance, setBalance] = useState();
 
     const [loader, setLoader] = useState(false)
@@ -25,6 +23,8 @@ const Mint = () => {
 
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const CONTRACT_ADDRESS = '0x56716b82f27a6c71CCb7Cc7cDFC1549f408407a8'
+
+    let accounts = localStorage.getItem('address');
 
     const sumbit = async event => {
         setLoader(true)
@@ -114,9 +114,6 @@ const Mint = () => {
         console.log('event', event);
         const file = event.target.files[0]
 
-        setPreviewImage(URL.createObjectURL(file))
-
-
         const formdata = new FormData();
 
         formdata.append('file', file);
@@ -139,50 +136,31 @@ const Mint = () => {
         }
     }
 
-    const connectMetamask = () => {
-        if (window.ethereum) {
-
-            window.ethereum.request({
-                method: 'eth_requestAccounts'
-            }).then((result) => {
-                accountChangedHandler(result[0])
-
-            }).catch((error) => {
-                console.error(error);
-            });
-        }
-        else {
-            console.log('no metamask installed.');
-        }
-    }
-
-    const accountChangedHandler = async (account) => {
-        setAccount(account)
-
-        const balance = await provider.getBalance(account);
+    const getBalance = async () => {
+        const balance = await provider.getBalance(accounts);
         const nativeBalance = ethers.utils.formatEther(balance);
 
         await setBalance(nativeBalance)
     }
 
+    useEffect(() => {
+        getBalance()
+    })
+
     return (
         <>
             <div className='container' style={{ 'padding': '5rem' }}>
-
                 <div className={classes.card}>
                     {(!mintHash && loader) && <div style={{ 'padding': '20rem 0rem' }}><Loader ></Loader></div>}
                     {(!mintHash && !loader) && <div>
                         <div className='flex justify-end'>
-                            {accounts.length === 0 && (<h5 style={{ 'cursor': 'pointer' }} onClick={connectMetamask}>Connect</h5>)}
-                            {accounts.length > 0 && (
-                                <div>
-                                    <h5 style={{ 'cursor': 'pointer' }}>{accounts.substring(0, 7) + '...'}</h5>
-                                    <div className='flex justify-center align-middle mt-1' style={{ fontSize: '10px' }}>
-                                        <span className='me-2'>{balance}</span>
-                                        <span><img style={{ maxWidth: '12px' }} src="https://assets.seracle.com/polygon-matic.svg" alt="" /></span>
-                                    </div>
+                            <div>
+                                <h5 style={{ 'cursor': 'pointer' }}>{accounts.substring(0, 6) + '...' + accounts.substring(accounts.length - 4, accounts.length)}</h5>
+                                <div className='flex justify-center align-middle mt-1' style={{ fontSize: '10px' }}>
+                                    <span className='me-2'>{balance}</span>
+                                    <span><img style={{ maxWidth: '12px' }} src="https://assets.seracle.com/polygon-matic.svg" alt="" /></span>
                                 </div>
-                            )}
+                            </div>
                         </div>
 
                         <div className='mb-3'>
