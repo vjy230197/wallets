@@ -6,6 +6,7 @@ import classes from './AddCollection.module.css'
 import { Button } from 'react-bootstrap';
 import Web3 from 'web3';
 import MyContract from '../../Contract/Contract.json';
+import Dropdown from '../../UI/Dropdown';
 import { useNavigate } from 'react-router-dom';
 
 const AddCollection = () => {
@@ -19,6 +20,14 @@ const AddCollection = () => {
     const [waitScreen, setWaitScreen] = useState(false)
 
     const navigate = useNavigate();
+
+    const array = [{
+        label: 'Drawing + Paintings', key: 'drawing_painting'
+    }, {
+        label: 'Music', key: 'music'
+    }, {
+        label: 'Fashion', key: 'fashion'
+    }];
 
     const fileUpload = async event => {
         setImgLoader(true)
@@ -66,31 +75,38 @@ const AddCollection = () => {
         const contractBytecode = MyContract.bytecode;
 
         const contract = new web3.eth.Contract(contractABI);
-        // setContractAddress('0x004e922EdE91566d79Cb48E375f08fDdC09C44E7')
         window.ethereum.enable()
             .then(accounts => {
                 const fromAddress = localStorage.getItem('address')
-                contract.deploy({
-                    data: contractBytecode,
-                    arguments: [collectionName, symbol]
-                })
-                    .send({
-                        from: fromAddress,
-                        gas: 4700000
-                    })
-                    .then((deployedContract) => {
-                        setLoader(false);
-                        setContractAddress(deployedContract.options.address)
-                        setWaitScreen(true)
 
-                        setTimeout(() => {
-                            setWaitScreen(false)
-                        }, 5000)
-                    })
-                    .catch((error) => {
-                        setLoader(false);
-                        console.error('Contract deployment failed:', error);
-                    });
+                setLoader(false);
+                setContractAddress('0x004e922EdE91566d79Cb48E375f08fDdC09C44E7')
+                setWaitScreen(true)
+                setTimeout(() => {
+                    setWaitScreen(false)
+                }, 5000)
+
+                // contract.deploy({
+                //     data: contractBytecode,
+                //     arguments: [collectionName, symbol]
+                // })
+                //     .send({
+                //         from: fromAddress,
+                //         gas: 4700000
+                //     })
+                //     .then((deployedContract) => {
+                //         setLoader(false);
+                //         setContractAddress(deployedContract.options.address)
+                //         setWaitScreen(true)
+
+                //         setTimeout(() => {
+                //             setWaitScreen(false)
+                //         }, 5000)
+                //     })
+                //     .catch((error) => {
+                //         setLoader(false);
+                //         console.error('Contract deployment failed:', error);
+                //     });
             })
             .catch(error => {
                 setLoader(false);
@@ -121,6 +137,9 @@ const AddCollection = () => {
         }
     }
 
+    const handleSelection = (value) => {
+        console.log('value main', value);
+    }
 
     return (
         <>
@@ -155,7 +174,7 @@ const AddCollection = () => {
                                     <div className={`${classes.label} + mb-3`}>Name</div>
                                     <input placeholder='My Collection Name' value={collectionName} type="text" className={`${classes.input} + me-3 ps-3`} onChange={collectionNameHandler} />
                                 </div>
-                                <div className="mb-5">
+                                <div className="mb-4">
                                     <div className={`${classes.label} + mb-3`}>Token Symbol</div>
                                     <div className='text-left mb-3'>
                                         The token symbol is shown on the block explorer when others view your smart contract.
@@ -214,9 +233,16 @@ const AddCollection = () => {
                                     <div className={`${classes.label} + mb-3`}>Symbol</div>
                                     <input readOnly value={symbol} type="text" className={`${classes.input} + me-3 ps-3`} />
                                 </div>
-                                <div className='mb-5'>
+                                <div className='mb-4'>
                                     <div className={`${classes.label} + mb-3`}>Description</div>
                                     <textarea placeholder='Add a Description' value={description} cols="5" rows='5' className={classes.textarea} onChange={descriptionChangeHandler} />
+                                </div>
+                                <div className='mb-5'>
+                                    <div className={`${classes.label} + mb-3`}>Category and tags</div>
+                                    <div className='text-left mb-3'>
+                                        Make your items more discoverable on OpenSea by adding tags and a category.
+                                    </div>
+                                    <Dropdown array={array} onDropdownChange={handleSelection} />
                                 </div>
                                 <div>
                                     <Button className={classes.btn} onClick={saveDetails}>Save Collection</Button>
