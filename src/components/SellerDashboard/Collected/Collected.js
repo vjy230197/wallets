@@ -42,7 +42,7 @@ const Collected = () => {
 
     const result = nfts.map((nft, index) => {
         return <Card key={index} maxWidth='20rem'>
-            <div className='px-3 py-3' style={{ cursor: 'pointer' }} onClick={() => { navigate(`/nftdetails/${nft.nft_id}`) }}>
+            <div style={{ cursor: 'pointer' }} onClick={() => { navigate(`/nftdetails/${nft.nft_id}`) }}>
                 <div className={classes.zoom_effect}>
                     <img src={nft.image} alt="" />
                 </div>

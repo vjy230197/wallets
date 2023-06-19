@@ -4,6 +4,7 @@ import { Button } from 'react-bootstrap';
 import { ethers } from "ethers";
 import { useNavigate } from 'react-router-dom';
 import Loader from '../UI/Loader'
+import SmallLoader from '../UI/SmallLoader'
 const mintAbiArray = require('../../abis/mintAbiArray')
 
 const Mint = () => {
@@ -18,6 +19,7 @@ const Mint = () => {
 
     const [balance, setBalance] = useState();
 
+    const [imgLoader, setImgLoader] = useState(false)
     const [loader, setLoader] = useState(false)
     const [hideSubmit, setHideSubmit] = useState(true)
 
@@ -111,7 +113,7 @@ const Mint = () => {
 
 
     const fileUpload = async event => {
-        console.log('event', event);
+        setImgLoader(true)
         const file = event.target.files[0]
 
         const formdata = new FormData();
@@ -130,9 +132,11 @@ const Mint = () => {
             const image = await res.json()
             setImageUrl(image.url)
             setHideSubmit(false)
+            setImgLoader(false)
 
         } else {
             console.error('Something went wrong');
+            setImgLoader(false)
         }
     }
 
@@ -191,7 +195,10 @@ const Mint = () => {
                             <div className={classes.logo_wrapper}>
                                 <div className={`${classes.box} + mb-3`}>
                                     {imageUrl && <img src={imageUrl} alt="" />}
-                                    {!imageUrl && <input className={classes.input_file} type="file" onChange={fileUpload} />}
+                                    {!imageUrl && imgLoader && <div className="px-3 py-3">
+                                        <SmallLoader />
+                                    </div>}
+                                    {!imageUrl && !imgLoader && <input className={classes.input_file} type="file" onChange={fileUpload} />}
                                 </div>
                                 <div>
                                     350 x 350 px recommended
