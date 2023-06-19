@@ -222,7 +222,7 @@ const Mint = () => {
                         </div>
 
                         <div className="text-center">
-                            <Button disabled={hideSubmit} onClick={sumbit}>MINT</Button>
+                            <Button className={classes.btn} disabled={hideSubmit} onClick={sumbit}>MINT</Button>
                         </div>
                     </div>}
 
@@ -246,7 +246,7 @@ const Mint = () => {
                             </span>
                         </div>
                         <div>
-                            <Button onClick={addNft}>Add NFT</Button>
+                            <Button className={classes.btn} onClick={addNft}>Add NFT</Button>
                         </div>
                     </div>}
                 </div>

@@ -26,7 +26,7 @@
 
 .box {
   width: 100%;
-  max-width: 7rem;
+  max-width: 11rem;
   margin-left: auto;
   margin-right: auto;
   height: 100%;
@@ -42,7 +42,7 @@
 }
 
 .add_collection .box img {
-  max-height: 7rem;
+  max-height: 11rem;
 }
 
 .box:hover {
@@ -57,7 +57,7 @@
   display: inline-block;
   background: linear-gradient(top, #f9f9f9, #e3e3e3);
   border-radius: 3px;
-  padding: 2rem 3rem;
+  padding: 3rem 5rem;
   outline: none;
   white-space: nowrap;
   -webkit-user-select: none;

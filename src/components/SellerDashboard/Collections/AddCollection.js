@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Card from '../../UI/Card'
 import Loader from '../../UI/Loader';
+import SmallLoader from '../../UI/SmallLoader'
 import classes from './AddCollection.module.css'
 import { Button } from 'react-bootstrap';
 import Web3 from 'web3';
@@ -14,11 +15,13 @@ const AddCollection = () => {
     const [contractAddress, setContractAddress] = useState()
     const [description, setDescription] = useState('');
     const [loader, setLoader] = useState(false)
+    const [imgLoader, setImgLoader] = useState(false)
     const [waitScreen, setWaitScreen] = useState(false)
 
     const navigate = useNavigate();
 
     const fileUpload = async event => {
+        setImgLoader(true)
         const file = event.target.files[0]
         const formdata = new FormData();
 
@@ -33,10 +36,12 @@ const AddCollection = () => {
         })
 
         if (res.status === 200) {
+            setImgLoader(false)
             const image = await res.json()
             setImageUrl(image.url)
 
         } else {
+            setImgLoader(false)
             console.error('Something went wrong');
         }
     }
@@ -131,12 +136,14 @@ const AddCollection = () => {
                                 <div className='text-left mb-4'>
                                     Deploying your own contract requires uploading your <br /> metadata outside of Heftyart.
                                 </div>
-
                                 <div className='mb-4'>
                                     <div className={`${classes.label} + mb-3`}>Logo image</div>
                                     <div className={classes.logo_wrapper}>
+                                        <div className='mb-3'>
+                                            {!imageUrl && imgLoader && <SmallLoader />}
+                                        </div>
                                         <div className={`${classes.box} + mb-3`}>
-                                            {imageUrl && <img src={imageUrl} alt="" />}
+                                            {imageUrl && !imgLoader && <img src={imageUrl} alt="" />}
                                             {!imageUrl && <input className={classes.input_file} type="file" onChange={fileUpload} />}
                                         </div>
                                         <div>
