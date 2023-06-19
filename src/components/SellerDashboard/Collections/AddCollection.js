@@ -13,6 +13,8 @@ const AddCollection = () => {
     const [symbol, setSymbol] = useState();
     const [contractAddress, setContractAddress] = useState()
     const [description, setDescription] = useState('');
+    const [loader, setLoader] = useState(false)
+    const [waitScreen, setWaitScreen] = useState(false)
 
     const navigate = useNavigate();
 
@@ -52,6 +54,7 @@ const AddCollection = () => {
     }
 
     const deployContract = () => {
+        setLoader(true);
         const web3 = new Web3(window.ethereum);
 
         const contractABI = MyContract.abi;
@@ -71,14 +74,21 @@ const AddCollection = () => {
                         gas: 4700000
                     })
                     .then((deployedContract) => {
+                        setLoader(false);
                         setContractAddress(deployedContract.options.address)
-                        console.log('Contract deployed at address:', contractAddress);
+                        setWaitScreen(true)
+
+                        setTimeout(() => {
+                            setWaitScreen(false)
+                        }, 5000)
                     })
                     .catch((error) => {
+                        setLoader(false);
                         console.error('Contract deployment failed:', error);
                     });
             })
             .catch(error => {
+                setLoader(false);
                 console.error('Failed to connect to the web3 provider:', error);
             });
     }
@@ -101,7 +111,6 @@ const AddCollection = () => {
 
         if (response.status === 200) {
             navigate('/dashboard');
-
         } else {
             console.error('Something went wrong');
         }
@@ -114,13 +123,13 @@ const AddCollection = () => {
                 <Card maxWidth='40rem'>
                     <div className="px-4 py-4">
                         {
-                            !contractAddress &&
+                            !contractAddress && !loader &&
                             <div>
                                 <div className='text-left mb-3'>
                                     <h3>Create a collection</h3>
                                 </div>
                                 <div className='text-left mb-4'>
-                                    Deploying your own contract requires uploading your <br /> metadata outside of OpenSea.
+                                    Deploying your own contract requires uploading your <br /> metadata outside of Heftyart.
                                 </div>
 
                                 <div className='mb-4'>
@@ -152,7 +161,40 @@ const AddCollection = () => {
                             </div>
                         }
                         {
-                            contractAddress &&
+                            !contractAddress && loader && (
+                                <div>
+                                    <div className='mb-5 text-left'>
+                                        <h3>Deploy your contract</h3>
+                                    </div>
+                                    <div className='mb-3 text-left'>
+                                        <h5>Go to your wallet</h5>
+                                    </div>
+                                    <div className='mb-3 text-left'>
+                                        Approve the transaction in your wallet to complete the contract deploy.
+                                    </div>
+                                </div>
+                            )
+                        }
+                        {
+                            contractAddress && waitScreen && (
+                                <div>
+                                    <div className='flex justify-center px-5 py-5 mb-5'>
+                                        <Loader></Loader>
+                                    </div>
+                                    <div className='text-center mb-5'>
+                                        <h4>Your Contract is being deployed</h4>
+                                    </div>
+                                    <div className='text-center mb-4'>
+                                        Your new contract is being deployed. It may take some time for the transaction to be processed and the collection to be reflected on Heftyart.
+                                    </div>
+                                    <div className="text-center">
+                                        <a target="_blank" href={`https://mumbai.polygonscan.com/address/${contractAddress}`}>View on Polygonscan</a>
+                                    </div>
+                                </div>
+                            )
+                        }
+                        {
+                            contractAddress && !waitScreen &&
                             <div>
                                 <div className='text-left mb-3'>
                                     <h3>Collection Details</h3>
@@ -160,6 +202,10 @@ const AddCollection = () => {
                                 <div className="mb-4">
                                     <div className={`${classes.label} + mb-3`}>Name</div>
                                     <input readOnly value={collectionName} type="text" className={`${classes.input} + me-3 ps-3`} />
+                                </div>
+                                <div className="mb-4">
+                                    <div className={`${classes.label} + mb-3`}>Symbol</div>
+                                    <input readOnly value={symbol} type="text" className={`${classes.input} + me-3 ps-3`} />
                                 </div>
                                 <div className='mb-5'>
                                     <div className={`${classes.label} + mb-3`}>Description</div>

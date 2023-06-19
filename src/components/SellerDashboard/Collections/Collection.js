@@ -67,6 +67,19 @@ const Collection = () => {
                     collections.length > 0 && <div className={`${classes.collections}`}> {result}</div>
                 }
 
+                {
+                    collections.length == 0 && <div>
+                        <Card maxWidth='25rem' margin='auto'>
+                            <div style={{ padding: '7rem' }}>
+                                <div className="mb-5">
+                                    <img src="https://assets.seracle.com/nodatagif3.gif" style={{ maxWidth: '10rem' }} alt="" />
+                                </div>
+                                <Button onClick={() => { navigate('/addCollection') }}>Create</Button>
+                            </div>
+                        </Card>
+                    </div>
+                }
+
             </div>
         </>
     )
