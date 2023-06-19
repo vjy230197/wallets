@@ -26,7 +26,8 @@ const SelletDashboard = () => {
                     >
                         <Tab label="Collections" className='me-3' />
                         <Tab label="Create NFT" />
-
+                        <Tab label="Created" />
+                        <Tab label="Collected" />
                     </Tabs>
                 </Paper>
                 <hr style={{ 'borderBottom': '1px solid lightseagreen', 'opacity': 0.25 }} />
