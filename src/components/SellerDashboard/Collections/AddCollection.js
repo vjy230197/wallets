@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Card from '../../UI/Card'
 import Loader from '../../UI/Loader';
 import SmallLoader from '../../UI/SmallLoader'
@@ -18,16 +18,10 @@ const AddCollection = () => {
     const [loader, setLoader] = useState(false)
     const [imgLoader, setImgLoader] = useState(false)
     const [waitScreen, setWaitScreen] = useState(false)
+    const [categories, setCategories] = useState([])
+    const [categoryId, setCategoryId] = useState()
 
     const navigate = useNavigate();
-
-    const array = [{
-        label: 'Drawing + Paintings', key: 'drawing_painting'
-    }, {
-        label: 'Music', key: 'music'
-    }, {
-        label: 'Fashion', key: 'fashion'
-    }];
 
     const fileUpload = async event => {
         setImgLoader(true)
@@ -79,34 +73,34 @@ const AddCollection = () => {
             .then(accounts => {
                 const fromAddress = localStorage.getItem('address')
 
-                setLoader(false);
-                setContractAddress('0x004e922EdE91566d79Cb48E375f08fDdC09C44E7')
-                setWaitScreen(true)
-                setTimeout(() => {
-                    setWaitScreen(false)
-                }, 5000)
+                // setLoader(false);
+                // setContractAddress('0x004e922EdE91566d79Cb48E375f08fDdC09C44E7')
+                // setWaitScreen(true)
+                // setTimeout(() => {
+                //     setWaitScreen(false)
+                // }, 5000)
 
-                // contract.deploy({
-                //     data: contractBytecode,
-                //     arguments: [collectionName, symbol]
-                // })
-                //     .send({
-                //         from: fromAddress,
-                //         gas: 4700000
-                //     })
-                //     .then((deployedContract) => {
-                //         setLoader(false);
-                //         setContractAddress(deployedContract.options.address)
-                //         setWaitScreen(true)
+                contract.deploy({
+                    data: contractBytecode,
+                    arguments: [collectionName, symbol]
+                })
+                    .send({
+                        from: fromAddress,
+                        gas: 4700000
+                    })
+                    .then((deployedContract) => {
+                        setLoader(false);
+                        setContractAddress(deployedContract.options.address)
+                        setWaitScreen(true)
 
-                //         setTimeout(() => {
-                //             setWaitScreen(false)
-                //         }, 5000)
-                //     })
-                //     .catch((error) => {
-                //         setLoader(false);
-                //         console.error('Contract deployment failed:', error);
-                //     });
+                        setTimeout(() => {
+                            setWaitScreen(false)
+                        }, 7000)
+                    })
+                    .catch((error) => {
+                        setLoader(false);
+                        console.error('Contract deployment failed:', error);
+                    });
             })
             .catch(error => {
                 setLoader(false);
@@ -121,7 +115,8 @@ const AddCollection = () => {
             description: description,
             logo_img: imageUrl,
             symbol: symbol,
-            collection_name: collectionName
+            collection_name: collectionName,
+            categoryId: categoryId
         }
 
         const response = await fetch("http://localhost:1234/addCollection", {
@@ -137,8 +132,29 @@ const AddCollection = () => {
         }
     }
 
+    const getCategories = () => {
+        fetch('http://localhost:1234/getCategories', {
+            headers: { 'platform': 'web' }
+        })
+            .then((res) => res.json())
+            .then((res) => {
+
+                const categoryArray = res.data.map(({
+                    category_name, category_id
+                }) => ({
+                    label: category_name,
+                    key: category_id,
+                }));
+
+                setCategories(categoryArray)
+            })
+    }
+    useEffect(() => {
+        getCategories()
+    }, [])
+
     const handleSelection = (value) => {
-        console.log('value main', value);
+        setCategoryId(value)
     }
 
     return (
@@ -242,7 +258,7 @@ const AddCollection = () => {
                                     <div className='text-left mb-3'>
                                         Make your items more discoverable on OpenSea by adding tags and a category.
                                     </div>
-                                    <Dropdown array={array} onDropdownChange={handleSelection} />
+                                    <Dropdown array={categories} onDropdownChange={handleSelection} />
                                 </div>
                                 <div>
                                     <Button className={classes.btn} onClick={saveDetails}>Save Collection</Button>

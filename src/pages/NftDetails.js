@@ -29,7 +29,7 @@ const NftDetails = (props) => {
 
     let activity;
 
-    const fetchPost = async () => {
+    const fetchNftDetails = async () => {
 
         const body = {
             nft_id: nft_id
@@ -53,7 +53,7 @@ const NftDetails = (props) => {
 
     useEffect(() => {
         if (nft_id)
-            fetchPost()
+            fetchNftDetails()
     }, [nft_id])
 
 
