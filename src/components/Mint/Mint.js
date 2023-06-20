@@ -5,6 +5,8 @@ import { ethers } from "ethers";
 import { useNavigate } from 'react-router-dom';
 import Loader from '../UI/Loader'
 import SmallLoader from '../UI/SmallLoader'
+import Dropdown from '../UI/Dropdown';
+
 const mintAbiArray = require('../../abis/mintAbiArray')
 
 const Mint = () => {
@@ -16,6 +18,8 @@ const Mint = () => {
     const [price, setPrice] = useState('');
     const [description, setDescription] = useState('');
     const [mintHash, setMintHash] = useState()
+    const [collectionId, setCollectionId] = useState()
+    const [collections, setCollections] = useState([])
 
     const [balance, setBalance] = useState();
 
@@ -65,7 +69,6 @@ const Mint = () => {
 
             const tx = await provider.getTransactionReceipt(result.hash);
 
-            console.log('tx', tx);
             setMintHash(result.hash)
         }
 
@@ -86,7 +89,8 @@ const Mint = () => {
             address: accounts,
             mint_hash: mintHash,
             contract_address: CONTRACT_ADDRESS,
-            metadata_uri: metadataUri
+            metadata_uri: metadataUri,
+            collection_id: collectionId
         }
 
         const response = await fetch("http://localhost:1234/addNft", {
@@ -147,9 +151,43 @@ const Mint = () => {
         await setBalance(nativeBalance)
     }
 
+    const getcollections = async () => {
+        const body = {
+            address: localStorage.getItem('address')
+        }
+        const response = await fetch("http://localhost:1234/createdCollections", {
+            body: JSON.stringify(body),
+            method: 'POST',
+            headers: { "Content-Type": "application/json", 'platform': 'web' }
+        });
+
+        if (response.status === 200) {
+            const json = await response.json()
+
+            const collectionArray = json.data.map(({
+                name, logo_img, collection_id
+            }) => ({
+                label: name,
+                key: collection_id,
+                icon: logo_img
+            }));
+
+            await setCollections(collectionArray)
+
+        } else {
+            console.error('Something went wrong');
+        }
+    }
+
     useEffect(() => {
-        getBalance()
-    })
+        getBalance();
+        getcollections()
+    }, [])
+
+    const handleSelection = (value) => {
+        console.log('COllection chosen', value);
+        setCollectionId(value)
+    }
 
     return (
         <>
@@ -180,6 +218,14 @@ const Mint = () => {
                                     <img src="https://assets.seracle.com/polygon-matic.svg" alt="" />
                                 </span>
                             </div>
+                        </div>
+
+                        <div className={`${classes.label} + mb-3`}>Category and tags</div>
+                        <div className='text-left mb-3'>
+                            Make your items more discoverable on OpenSea by adding tags and a category.
+                        </div>
+                        <div className="mb-3">
+                            <Dropdown array={collections} onDropdownChange={handleSelection} icons='true' />
                         </div>
 
                         <div className='mb-3'>

@@ -228,7 +228,7 @@ const NftDetails = (props) => {
                                                     accounts === nft.current_owner && accounts !== nft.minter &&
                                                     <div>
                                                         <div className='text-left'>
-                                                            <Button className={classes.btn} disabled='true'>Sell Now</Button>
+                                                            <Button className={classes.btn} disabled={true}>Sell Now</Button>
                                                         </div>
                                                     </div>
                                                 }
@@ -236,7 +236,7 @@ const NftDetails = (props) => {
                                                     accounts === nft.minter &&
                                                     <div>
                                                         <div className='text-left'>
-                                                            <Button className={classes.btn} disabled='true'>Disable</Button>
+                                                            <Button className={classes.btn} disabled={true}>Disable</Button>
                                                         </div>
                                                     </div>
                                                 }

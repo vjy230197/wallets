@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import Select from 'react-select'
+import Select, { components } from 'react-select'
+const { Option } = components;
 
 const Dropdown = (props) => {
     const [value, setValue] = useState();
@@ -10,6 +11,21 @@ const Dropdown = (props) => {
 
         props.onDropdownChange(event.key)
     };
+
+    function IconOption(props) {
+        const {
+            data: { label, Icon },
+        } = props;
+
+        return (
+            <Option {...props}>
+                <div className="flex items-center gap-2">
+                    {Icon && <Icon />}
+                    <span>{label}</span>
+                </div>
+            </Option>
+        );
+    }
 
     const colourStyles = {
         control: (styles, { isSelected, isFocused }) => ({
@@ -32,7 +48,12 @@ const Dropdown = (props) => {
     };
 
     return (
-        <Select styles={colourStyles} options={array} onChange={handleChange} />
+        <Select styles={colourStyles} options={array} getOptionLabel={e => (
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+                {<img src={e.icon} style={{ 'maxWidth': '2rem', 'borderRadius': '100%', 'height': '2rem' }} alt="" />}
+                <span className='ms-3'>{e.label}</span>
+            </div>
+        )} onChange={handleChange} />
     )
 }
 
