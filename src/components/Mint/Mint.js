@@ -20,6 +20,7 @@ const Mint = () => {
     const [mintHash, setMintHash] = useState()
     const [collectionId, setCollectionId] = useState()
     const [collections, setCollections] = useState([])
+    const [contractAddress, setContractAddress] = useState();
 
     const [balance, setBalance] = useState();
 
@@ -28,7 +29,6 @@ const Mint = () => {
     const [hideSubmit, setHideSubmit] = useState(true)
 
     const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const CONTRACT_ADDRESS = '0x56716b82f27a6c71CCb7Cc7cDFC1549f408407a8'
 
     let accounts = localStorage.getItem('address');
 
@@ -61,7 +61,7 @@ const Mint = () => {
         try {
             const signer = provider.getSigner();
 
-            const contract = new ethers.Contract(CONTRACT_ADDRESS, mintAbiArray, signer);
+            const contract = new ethers.Contract(contractAddress, mintAbiArray, signer);
 
             const result = await contract.connect(signer).mintNft(accounts, metadataUri)
 
@@ -88,7 +88,7 @@ const Mint = () => {
             currency: 'matic',
             address: accounts,
             mint_hash: mintHash,
-            contract_address: CONTRACT_ADDRESS,
+            contract_address: contractAddress,
             metadata_uri: metadataUri,
             collection_id: collectionId
         }
@@ -179,15 +179,42 @@ const Mint = () => {
         }
     }
 
+    const fetchCollectionDetails = async () => {
+        console.log('fetchCollectionDetails', { collectionId });
+        const body = {
+            collection_id: collectionId
+        }
+
+        const response = await fetch("http://localhost:1234/collectionDetails", {
+            body: JSON.stringify(body),
+            method: 'POST',
+            headers: { "Content-Type": "application/json", 'platform': 'web' }
+        });
+
+        if (response.status === 200) {
+            const json = await response.json()
+            const data = json.data;
+
+            setContractAddress(data.contract_address)
+
+        } else {
+            console.error('Something went wrong');
+        }
+    }
+
     useEffect(() => {
         getBalance();
         getcollections()
-    }, [])
+        if (collectionId)
+            fetchCollectionDetails()
+    }, [collectionId])
 
     const handleSelection = (value) => {
         console.log('COllection chosen', value);
         setCollectionId(value)
     }
+
+
 
     return (
         <>
@@ -273,7 +300,7 @@ const Mint = () => {
                         <div className='flex justify-between mb-5'>
                             <div>Contract Address</div>
                             <span>
-                                <a target="_blank" href={`https://mumbai.polygonscan.com/address/${CONTRACT_ADDRESS}`}>{CONTRACT_ADDRESS.substring(0, 15) + '...'}</a>
+                                <a target="_blank" href={`https://mumbai.polygonscan.com/address/${contractAddress}`}>{contractAddress.substring(0, 15) + '...'}</a>
                             </span>
                         </div>
                         <div>
