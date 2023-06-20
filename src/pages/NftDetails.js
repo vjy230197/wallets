@@ -12,20 +12,17 @@ const mintAbiArray = require('../abis/mintAbiArray');
 
 const NftDetails = (props) => {
 
+    let accounts = localStorage.getItem('address');
+
     const navigate = useNavigate()
     const nft_id = useParams().nftid;
     const [nft, setNft] = useState()
-    const [accounts, setAccount] = useState([]);
     const [balance, setBalance] = useState();
     const [loader, setLoader] = useState(false);
     const [transferHash, setTransferHash] = useState()
 
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
-
-    const CONTRACT_ADDRESS = '0x56716b82f27a6c71CCb7Cc7cDFC1549f408407a8'
-
-    const contract = new ethers.Contract(CONTRACT_ADDRESS, mintAbiArray, signer);
 
     let activity;
 
@@ -51,37 +48,18 @@ const NftDetails = (props) => {
         }
     }
 
-    useEffect(() => {
-        if (nft_id)
-            fetchNftDetails()
-    }, [nft_id])
-
-
-    const connectMetamask = async () => {
-        if (window.ethereum) {
-
-            window.ethereum.request({
-                method: 'eth_requestAccounts'
-            }).then((result) => {
-                accountChangedHandler(result[0])
-
-            }).catch((error) => {
-                console.error(error);
-            });
-        }
-        else {
-            console.log('no metamask installed.');
-        }
-    }
-
-    const accountChangedHandler = async (account) => {
-        setAccount(account)
-
-        const balance = await provider.getBalance(account);
+    const getBalance = async () => {
+        const balance = await provider.getBalance(accounts);
         const nativeBalance = ethers.utils.formatEther(balance);
 
         await setBalance(nativeBalance)
     }
+
+    useEffect(() => {
+        getBalance();
+        if (nft_id)
+            fetchNftDetails()
+    }, [nft_id])
 
     const buyNft = async () => {
 
@@ -90,6 +68,9 @@ const NftDetails = (props) => {
             const decimals = 18;
             const input = (nft.current_price).toString(); // Note: this is a string, e.g. user input
             const amount = ethers.utils.parseUnits(input, decimals)
+
+            const contract = new ethers.Contract(nft.contract_address, mintAbiArray, signer);
+
 
             const result = await contract.connect(signer).transferNft(nft.minter, accounts, nft.token_id, amount, {
                 value: amount
@@ -142,8 +123,8 @@ const NftDetails = (props) => {
         activity = nft.history.map((item, index) => {
             return <tr key={index}>
                 <td>{item.type.toUpperCase()}</td>
-                <td>{<a target="_blank" href={`https://mumbai.polygonscan.com/tx/${item.from}`}>{item.from.substring(0, 15) + '...'}</a>}</td>
-                <td>{<a target="_blank" href={`https://mumbai.polygonscan.com/tx/${item.to}`}>{item.to.substring(0, 15) + '...'}</a>}</td>
+                <td>{<a target="_blank" href={`https://mumbai.polygonscan.com/tx/${item.from}`}>{item.from.substring(0, 6) + '...' + item.from.substring(item.from.length - 4, item.from.length)}</a>}</td>
+                <td>{<a target="_blank" href={`https://mumbai.polygonscan.com/tx/${item.to}`}>{item.to.substring(0, 6) + '...' + item.to.substring(item.to.length - 4, item.to.length)}</a>}</td>
                 <td>{new Date(item.created).toLocaleString(
                     "en-US",
                     {
@@ -152,7 +133,7 @@ const NftDetails = (props) => {
                         year: "numeric",
                     }
                 )}</td>
-                <td>{<a target="_blank" href={`https://mumbai.polygonscan.com/tx/${item.hash}`}>{item.hash.substring(0, 15) + '...'}</a>}</td>
+                <td>{<a target="_blank" href={`https://mumbai.polygonscan.com/tx/${item.hash}`}>{item.hash.substring(0, 6) + '...' + item.hash.substring(item.hash.length - 4, item.hash.length)}</a>}</td>
             </tr>
         })
     }
@@ -190,7 +171,7 @@ const NftDetails = (props) => {
                                 <div className='text-left mb-5'>
                                     {accounts !== nft.current_owner &&
                                         <div>
-                                            Owned by <a target="_blank" href={`https://mumbai.polygonscan.com/address/${nft.current_owner}`}>{nft.current_owner}</a>
+                                            Owned by <a target="_blank" href={`https://mumbai.polygonscan.com/address/${nft.current_owner}`}>{nft.current_owner.substring(0, 6) + '...' + nft.current_owner.substring(nft.current_owner.length - 4, nft.current_owner.length)}</a>
                                         </div>
                                     }
                                     {
@@ -210,8 +191,10 @@ const NftDetails = (props) => {
                                     <Card maxWidth='40rem' margin='unset'>
                                         <div className='px-4 py-4 flex justify-between'>
                                             <div style={{ width: '100%', 'margin': 'auto' }}>
+
+                                                {/* Buyer checking nft */}
                                                 {
-                                                    accounts !== nft.current_owner &&
+                                                    accounts !== nft.minter && accounts !== nft.current_owner &&
                                                     <div>
                                                         <div className='text-left mb-3'>
                                                             <h5>Buy it at</h5>
@@ -224,16 +207,30 @@ const NftDetails = (props) => {
                                                         </div>
                                                     </div>
                                                 }
+
+                                                {/* Current owner checking collected nfts  */}
                                                 {
-                                                    accounts === nft.current_owner && accounts !== nft.minter &&
+                                                    accounts !== nft.minter && accounts === nft.current_owner &&
                                                     <div>
                                                         <div className='text-left'>
                                                             <Button className={classes.btn} disabled={true}>Sell Now</Button>
                                                         </div>
                                                     </div>
                                                 }
+
+                                                {/* Seller checking created nfts, is transferred. */}
                                                 {
-                                                    accounts === nft.minter &&
+                                                    accounts === nft.minter && accounts !== nft.current_owner &&
+                                                    <div>
+                                                        <div className='text-left'>
+                                                            <Button className={classes.btn} disabled={true}>Sold Out</Button>
+                                                        </div>
+                                                    </div>
+                                                }
+
+                                                {/* Seller minted, still has ownership. */}
+                                                {
+                                                    accounts === nft.minter && accounts === nft.current_owner &&
                                                     <div>
                                                         <div className='text-left'>
                                                             <Button className={classes.btn} disabled={true}>Disable</Button>
@@ -244,9 +241,8 @@ const NftDetails = (props) => {
                                             <div className={classes.line}>
                                             </div>
                                             <div style={{ width: '100%', margin: 'auto' }}>
-                                                <div className='mb-4' onClick={connectMetamask}>
-                                                    {accounts.length === 0 && (<span style={{ 'cursor': 'pointer' }} onClick={connectMetamask}>Connect</span>)}
-                                                    {accounts.length > 0 && (<span style={{ 'cursor': 'pointer' }}>{accounts.substring(0, 15) + '...'}</span>)}
+                                                <div className='mb-4'>
+                                                    <span style={{ 'cursor': 'pointer' }}>{accounts.substring(0, 6) + '...' + accounts.substring(accounts.length - 4, accounts.length)}</span>
                                                 </div>
                                                 <hr />
                                                 {accounts && <div className='flex justify-center mt-4'>
@@ -283,7 +279,7 @@ const NftDetails = (props) => {
                                                     Contract Address
                                                 </div>
                                                 <div className={classes.value}>
-                                                    <a target="_blank" href={`https://mumbai.polygonscan.com/address/${nft.contract_address}`}>{nft.contract_address.substring(0, 15) + '...'}</a>
+                                                    <a target="_blank" href={`https://mumbai.polygonscan.com/address/${nft.contract_address}`}>{nft.contract_address.substring(0, 6) + '...' + nft.contract_address.substring(nft.contract_address.length - 4, nft.contract_address.length)}</a>
                                                 </div>
                                             </div>
                                             <div className="flex justify-between mb-3">
@@ -329,13 +325,13 @@ const NftDetails = (props) => {
                                         <div className='flex justify-between mb-2'>
                                             <div>Transaction Hash</div>
                                             <span>
-                                                <a target="_blank" href={`https://mumbai.polygonscan.com/tx/${transferHash}`}>{transferHash.substring(0, 15) + '...'}</a>
+                                                <a target="_blank" href={`https://mumbai.polygonscan.com/tx/${transferHash}`}>{transferHash.substring(0, 6) + '...' + transferHash.substring(transferHash.length - 4, transferHash.length)}</a>
                                             </span>
                                         </div>
                                         <div className='flex justify-between mb-5'>
                                             <div>Contract Address</div>
                                             <span>
-                                                <a target="_blank" href={`https://mumbai.polygonscan.com/address/${CONTRACT_ADDRESS}`}>{CONTRACT_ADDRESS.substring(0, 15) + '...'}</a>
+                                                <a target="_blank" href={`https://mumbai.polygonscan.com/address/${nft.contract_address}`}>{nft.contract_address.substring(0, 6) + '...' + nft.contract_address.substring(nft.contract_address.length - 4, nft.contract_address.length)}</a>
                                             </span>
                                         </div>
                                         <div>
