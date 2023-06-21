@@ -21,6 +21,7 @@ const Mint = () => {
     const [collectionId, setCollectionId] = useState()
     const [collections, setCollections] = useState([])
     const [contractAddress, setContractAddress] = useState();
+    const [currency, setCurrency] = useState();
 
     const [balance, setBalance] = useState();
 
@@ -31,6 +32,10 @@ const Mint = () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
 
     let accounts = localStorage.getItem('address');
+
+    const chainIdMap = {
+        80001: 'matic'
+    }
 
     const sumbit = async event => {
         setLoader(true)
@@ -90,7 +95,8 @@ const Mint = () => {
             mint_hash: mintHash,
             contract_address: contractAddress,
             metadata_uri: metadataUri,
-            collection_id: collectionId
+            collection_id: collectionId,
+            currency: currency
         }
 
         const response = await fetch("http://localhost:1234/addNft", {
@@ -147,6 +153,9 @@ const Mint = () => {
     const getBalance = async () => {
         const balance = await provider.getBalance(accounts);
         const nativeBalance = ethers.utils.formatEther(balance);
+        const chainId = await provider.getNetwork()
+
+        setCurrency(chainIdMap[chainId.chainId])
 
         await setBalance(nativeBalance)
     }
