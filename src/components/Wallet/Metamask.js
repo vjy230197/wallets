@@ -50,7 +50,7 @@ function Metamask() {
                 <>
                     {!signature && <Sign onSign={handleSign} />}
                     {signature && <div>
-                        <h5 className='mb-5'>{accounts.substring(0, 15) + '...'}</h5>
+                        <h5 className='mb-5'>{accounts.substring(0, 6) + '...' + accounts.substring(accounts.length - 4, accounts.length)}</h5>
                         <Button onClick={handleDisconnect}>Disconnect</Button>
                     </div>}
 
