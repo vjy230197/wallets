@@ -22,6 +22,7 @@ const Mint = () => {
     const [collections, setCollections] = useState([])
     const [contractAddress, setContractAddress] = useState();
     const [currency, setCurrency] = useState();
+    const [categoryId, setCategoryId] = useState();
 
     const [balance, setBalance] = useState();
 
@@ -96,7 +97,8 @@ const Mint = () => {
             contract_address: contractAddress,
             metadata_uri: metadataUri,
             collection_id: collectionId,
-            currency: currency
+            currency: currency,
+            category_id: categoryId
         }
 
         const response = await fetch("http://localhost:1234/addNft", {
@@ -204,6 +206,7 @@ const Mint = () => {
             const json = await response.json()
             const data = json.data;
 
+            setCategoryId(data.category_id)
             setContractAddress(data.contract_address)
 
         } else {

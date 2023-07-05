@@ -38,6 +38,8 @@ function Metamask() {
 
     const handleSign = sign => {
         setSignature(sign)
+
+        console.log(sign);
     }
 
     const style = { 'margin': 'auto', 'maxWidth': '7rem', 'marginBottom': '1rem' }

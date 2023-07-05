@@ -28,13 +28,8 @@ const NftDetails = (props) => {
 
     const fetchNftDetails = async () => {
 
-        const body = {
-            nft_id: nft_id
-        }
-
-        const response = await fetch("http://localhost:1234/nftDetails", {
-            body: JSON.stringify(body),
-            method: 'POST',
+        const response = await fetch(`http://localhost:1234/nftDetail?nft_id=${nft_id}`, {
+            method: 'GET',
             headers: { "Content-Type": "application/json", 'platform': 'web' }
         });
 
