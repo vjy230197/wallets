@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import classes from './Mint.module.css'
 import { Button } from 'react-bootstrap';
-import { ethers } from "ethers";
+import { ethers, BigNumber } from "ethers";
 import { useNavigate } from 'react-router-dom';
 import Loader from '../UI/Loader'
 import SmallLoader from '../UI/SmallLoader'
@@ -69,7 +69,9 @@ const Mint = () => {
 
             const contract = new ethers.Contract(contractAddress, mintAbiArray, signer);
 
-            const result = await contract.connect(signer).mintNft(accounts, metadataUri)
+            const priceWei = BigNumber.from((price * 10 ** 18).toString());
+
+            const result = await contract.connect(signer).mintNft(accounts, metadataUri, priceWei)
 
             setLoader(false)
 
@@ -208,6 +210,8 @@ const Mint = () => {
 
             setCategoryId(data.category_id)
             setContractAddress(data.contract_address)
+
+            console.log('data.contract_address', data.contract_address);
 
         } else {
             console.error('Something went wrong');
