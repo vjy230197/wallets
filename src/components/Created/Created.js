@@ -5,7 +5,7 @@ import Card from '../UI/Card';
 import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { GetCreatedNfts } from '../../Features/Slices/FetchNftsSlice'
+import { GetCreatedNfts } from '../../Features/Slices/CreatedNftsSlice'
 import Loader from '../UI/Loader';
 
 
@@ -14,7 +14,7 @@ const Created = () => {
 
     const dispatch = useDispatch();
 
-    const response = useSelector((state) => state.getAllNfts)
+    const response = useSelector((state) => state.createdNfts)
 
     const nfts = response.nfts.data;
     const loading = response.loading
