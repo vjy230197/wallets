@@ -7,41 +7,36 @@ import { Button } from 'react-bootstrap';
 import Table from 'react-bootstrap/Table'
 import { ethers } from "ethers";
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux'
+import { getNftDetails } from '../Features/Slices/NftDetailsSlice'
 
 const mintAbiArray = require('../abis/mintAbiArray');
 
 const NftDetails = (props) => {
 
+    const dispatch = useDispatch()
     let accounts = localStorage.getItem('address');
+    const [loader, setLoader] = useState(false)
 
     const navigate = useNavigate()
     const nft_id = useParams().nftid;
-    const [nft, setNft] = useState()
+
     const [balance, setBalance] = useState();
-    const [loader, setLoader] = useState(false);
     const [transferHash, setTransferHash] = useState()
 
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
 
-    let activity;
+    useEffect(() => {
+        dispatch(getNftDetails(nft_id));
+        getBalance();
+    }, [])
 
-    const fetchNftDetails = async () => {
+    const response = useSelector((state) => state.nftDetails)
+    console.log('resposnse', response);
 
-        const response = await fetch(`http://localhost:1234/nftDetail?nft_id=${nft_id}`, {
-            method: 'GET',
-            headers: { "Content-Type": "application/json", 'platform': 'web' }
-        });
-
-        if (response.status === 200) {
-
-            const json = await response.json()
-            await setNft(json.data)
-
-        } else {
-            console.error('Something went wrong');
-        }
-    }
+    const loading = response.loading;
+    const nft = response.item.data
 
     const getBalance = async () => {
         const balance = await provider.getBalance(accounts);
@@ -49,12 +44,6 @@ const NftDetails = (props) => {
 
         await setBalance(nativeBalance)
     }
-
-    useEffect(() => {
-        getBalance();
-        if (nft_id)
-            fetchNftDetails()
-    }, [nft_id])
 
     const buyNft = async () => {
 
@@ -66,9 +55,13 @@ const NftDetails = (props) => {
 
             const contract = new ethers.Contract(nft.contract_address, mintAbiArray, signer);
 
+            const gasLimit = 200000;
+            const gasPrice = ethers.utils.parseUnits("50", "gwei");
 
-            const result = await contract.connect(signer).transferNft(nft.minter, accounts, nft.token_id, amount, {
-                value: amount
+            const result = await contract.connect(signer).transferNft(nft.token_id, nft.minter, accounts, {
+                value: amount,
+                gasLimit: gasLimit,
+                gasPrice: gasPrice,
             })
 
             setTransferHash(result.hash)
@@ -114,10 +107,11 @@ const NftDetails = (props) => {
         }
     }, [transferHash])
 
+    let activity;
     if (nft) {
         activity = nft.history.map((item, index) => {
             return <tr key={index}>
-                <td>{item.type.toUpperCase()}</td>
+                <td>{item.status.toUpperCase()}</td>
                 <td>{<a target="_blank" href={`https://mumbai.polygonscan.com/tx/${item.from}`}>{item.from.substring(0, 6) + '...' + item.from.substring(item.from.length - 4, item.from.length)}</a>}</td>
                 <td>{<a target="_blank" href={`https://mumbai.polygonscan.com/tx/${item.to}`}>{item.to.substring(0, 6) + '...' + item.to.substring(item.to.length - 4, item.to.length)}</a>}</td>
                 <td>{new Date(item.created).toLocaleString(
@@ -369,9 +363,9 @@ const NftDetails = (props) => {
                     </div>
                 </div>
             }
-            {
+            {/* {
                 !nft && <div style={{ 'padding': '20rem 0rem' }}><Loader ></Loader></div>
-            }
+            } */}
 
         </>
 
