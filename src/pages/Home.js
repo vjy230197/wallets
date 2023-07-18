@@ -15,17 +15,13 @@ const Home = () => {
 
     const response = useSelector((state) => state.getAllNfts)
 
-    // console.log('+', response);
-
     const nfts = response.nfts.data;
-    console.log('+ nfts', nfts);
     const loading = response.loading
 
     useEffect(() => {
         dispatch(GetAllNfts())
     }, [])
 
-    // console.log('nfts', nfts);
 
     let result
     if (nfts) {

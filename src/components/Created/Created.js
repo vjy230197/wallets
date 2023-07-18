@@ -4,72 +4,61 @@ import { ethers } from "ethers";
 import Card from '../UI/Card';
 import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import Loader from '../UI/Loader'
+import { useDispatch, useSelector } from 'react-redux';
+import { GetCreatedNfts } from '../../Features/Slices/FetchNftsSlice'
+import Loader from '../UI/Loader';
+
 
 const Created = () => {
     const navigate = useNavigate();
 
-    let accounts = localStorage.getItem('address');
+    const dispatch = useDispatch();
 
-    const [nfts, setNfts] = useState([])
-    const [loader, setLoader] = useState(false)
+    const response = useSelector((state) => state.getAllNfts)
 
+    const nfts = response.nfts.data;
+    const loading = response.loading
 
-    const createdNfts = async () => {
-        setLoader(true)
-        const body = {
-            address: accounts
-        }
-        const response = await fetch("http://localhost:1234/createdNfts", {
-            body: JSON.stringify(body),
-            method: 'POST',
-            headers: { "Content-Type": "application/json", 'platform': 'web' }
-        });
-
-        if (response.status === 200) {
-            const json = await response.json()
-            await setNfts(json.data)
-            setLoader(false)
-        } else {
-            console.error('Something went wrong');
-            setLoader(false)
-        }
-    }
+    console.log('+', nfts);
 
     useEffect(() => {
-        createdNfts()
+        dispatch(GetCreatedNfts())
     }, [])
 
-    const result = nfts.map((nft, index) => {
-        return <Card key={index} maxWidth='20rem'>
-            <div style={{ cursor: 'pointer' }} onClick={() => { navigate(`/nftdetails/${nft.nft_id}`) }}>
-                <div className={classes.zoom_effect}>
-                    <img src={nft.image} alt="" />
-                </div>
-                <div className='py-3 text-left px-3'>
-                    <h5>{nft.name}</h5>
-                </div>
-                <hr />
-                <div className='flex justify-between px-3 py-3'>
-                    <div style={{ 'margin': 'auto 0', 'fontSize': '13px' }}>
-                        Price <span className='ms-1'>
-                            {nft.current_price} MATIC
-                        </span>
+    let result;
+    if (nfts) {
+        result = nfts.map((nft, index) => {
+            return <Card key={index} maxWidth='20rem'>
+                <div style={{ cursor: 'pointer' }} onClick={() => { navigate(`/nftdetails/${nft.nft_id}`) }}>
+                    <div className={classes.zoom_effect}>
+                        <img src={nft.image} alt="" />
                     </div>
-                    <div>
-                        <Button>Update</Button>
+                    <div className='py-3 text-left px-3'>
+                        <h5>{nft.name}</h5>
+                    </div>
+                    <hr />
+                    <div className='flex justify-between px-3 py-3'>
+                        <div style={{ 'margin': 'auto 0', 'fontSize': '13px' }}>
+                            Price <span className='ms-1'>
+                                {nft.current_price} MATIC
+                            </span>
+                        </div>
+                        <div>
+                            <Button>Update</Button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </Card>
-    })
+            </Card>
+        })
+
+    }
 
     return (
         <>
             <div className={classes.buyer}>
                 <div>
                     {
-                        !loader && nfts.length === 0 &&
+                        !loading && nfts && nfts.length === 0 &&
                         <Card maxWidth='25rem' margin='auto'>
                             <div style={{ padding: '7rem' }}>
                                 <div className="mb-5">
@@ -80,11 +69,11 @@ const Created = () => {
                         </Card>
                     }
                     {
-                        loader && nfts.length > 0 &&
-                        <div style={{ 'padding': '5rem 0rem' }}><Loader ></Loader></div>
+                        loading && nfts &&
+                        <div style={{ 'padding': '5rem 0rem' }}><Loader /></div>
                     }
                     {
-                        !loader && nfts.length > 0 &&
+                        !loading && nfts &&
                         <div style={{ 'display': 'grid', 'gridTemplateColumns': '1fr 1fr 1fr', 'gridGap': '5rem 0' }}>
                             {result}
                         </div>
