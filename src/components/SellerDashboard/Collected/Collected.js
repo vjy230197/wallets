@@ -5,14 +5,14 @@ import Card from '../../UI/Card';
 import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Loader from '../../UI/Loader'
-import { getCollectedNfts } from '../../../Features/Slices/FetchNftsSlice';
+import { getCollectedNfts } from '../../../Features/Slices/CollectedNftsSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 const Collected = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch()
 
-    const response = useSelector((state) => state.getAllNfts)
+    const response = useSelector((state) => state.collectedNfts)
 
     const nfts = response.nfts.data;
     const loading = response.nfts.loading;

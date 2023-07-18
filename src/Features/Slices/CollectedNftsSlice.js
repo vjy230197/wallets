@@ -27,8 +27,8 @@ export const getCollectedNfts = createAsyncThunk('getCollectedNfts', async (args
     }
 })
 
-export const fetchAllNfts = createSlice({
-    name: 'fetchAllNfts',
+export const CollectedNftsSlice = createSlice({
+    name: 'CollectedNftsSlice',
     initialState: {
         nfts: [],
         loading: false,
@@ -49,4 +49,4 @@ export const fetchAllNfts = createSlice({
     }
 })
 
-export default fetchAllNfts.reducer;
+export default CollectedNftsSlice.reducer;
