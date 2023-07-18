@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-
+const address = localStorage.getItem('address');
 export const GetAllNfts = createAsyncThunk("GetAllNfts", async (args, { rejectWithValue }) => {
     const API = 'http://localhost:1234/getNfts';
     const response = await fetch(API, {
@@ -19,7 +19,7 @@ export const GetAllNfts = createAsyncThunk("GetAllNfts", async (args, { rejectWi
 export const GetCreatedNfts = createAsyncThunk('GetCreatedNfts', async (args, { rejectWithValue }) => {
     const API = "http://localhost:1234/createdNfts";
     const body = {
-        address: localStorage.getItem('address')
+        address: address
     }
     const response = await fetch(API, {
         body: JSON.stringify(body),
@@ -36,6 +36,30 @@ export const GetCreatedNfts = createAsyncThunk('GetCreatedNfts', async (args, { 
     }
 })
 
+export const getCollectedNfts = createAsyncThunk('getCollectedNfts', async (args, { rejectWithValue }) => {
+
+    try {
+        const API = 'http://localhost:1234/collectedNfts';
+        const body = {
+            address: address
+        }
+        const response = await fetch(API, {
+            body: JSON.stringify(body),
+            headers: {
+                platform: 'web',
+                'content-type': 'application/json'
+            },
+            method: 'POST'
+        })
+
+        const data = response.json()
+
+        return data;
+    }
+    catch (e) {
+        rejectWithValue(e)
+    }
+})
 
 export const fetchAllNfts = createSlice({
     name: 'fetchAllNfts',
@@ -67,6 +91,17 @@ export const fetchAllNfts = createSlice({
             state.loading = false
             state.error = action.payload
         },
+        [getCollectedNfts.pending]: (state) => {
+            state.loading = true;
+        },
+        [getCollectedNfts.fulfilled]: (state, action) => {
+            state.loading = false;
+            state.nfts = action.payload;
+        },
+        [getCollectedNfts.rejected]: (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        }
     }
 })
 
