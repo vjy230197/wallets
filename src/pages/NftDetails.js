@@ -33,7 +33,6 @@ const NftDetails = (props) => {
     }, [])
 
     const response = useSelector((state) => state.nftDetails)
-    console.log('resposnse', response);
 
     const loading = response.loading;
     const nft = response.item.data

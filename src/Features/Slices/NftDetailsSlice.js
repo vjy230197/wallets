@@ -2,10 +2,7 @@ const { createSlice, createAsyncThunk } = require("@reduxjs/toolkit");
 
 export const getNftDetails = createAsyncThunk('getNftDetails', async (nft_id, { rejectWithValue }) => {
     try {
-        // console.log('asdfasdf');
         const API = `http://localhost:1234/nftDetail?nft_id=${nft_id}`
-
-        console.log('api', API,);
         const response = await fetch(API, {
             method: 'GET',
             headers: { "Content-Type": "application/json", 'platform': 'web' }
@@ -13,7 +10,6 @@ export const getNftDetails = createAsyncThunk('getNftDetails', async (nft_id, { 
 
         const data = await response.json()
 
-        console.log('data asdfasdf', data);
         return data
     }
     catch (e) {
