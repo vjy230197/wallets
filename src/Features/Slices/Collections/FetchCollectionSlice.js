@@ -1,21 +1,16 @@
+import authHeader from "../../Auth/auth.header";
 const { createSlice, createAsyncThunk } = require("@reduxjs/toolkit");
-
 
 export const getCreatedCollections = createAsyncThunk('getCreatedCollections', async (args, { rejectWithValue }) => {
     try {
-        const API = 'http://localhost:1234/createdCollections'
-        const body = {
-            address: localStorage.getItem('address')
-        }
+        const API = 'https://preprodheftyartapi.thetrustpay.com/createdCollections'
 
         const response = await fetch(API, {
             headers: {
                 'platform': 'web',
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify(body),
-            method: 'POST'
-
+                'content-type': 'application/json',
+                token: authHeader()
+            }
         })
 
         const result = await response.json()
