@@ -1,12 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Sign from './Sign';
 import { Button } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import { connectMetamask } from '../../Features/Slices/Metamask/metamaskSlice';
 
 function Metamask() {
-    const [accounts, setAccount] = useState([]);
-    const [signature, setSignature] = useState(null);
+    const address = localStorage.getItem('address')
+    const signature = localStorage.getItem('signature')
+    const [message, setMessage] = useState()
+    const [nonce, setNonce] = useState()
 
-    const connectMetamask = () => {
+    const dispatch = useDispatch()
+
+    const user = useSelector((state) => state.metamaskConnect.token)
+
+    useEffect(() => {
+        const data = {
+            nonce: nonce,
+            signature_message: message,
+            signature: signature,
+            address: address
+        }
+
+        if (nonce && message)
+            dispatch(connectMetamask(data))
+    }, [nonce, message])
+
+    const connectMetamaskButton = () => {
         if (window.ethereum) {
 
             window.ethereum.request({
@@ -24,42 +44,44 @@ function Metamask() {
     }
 
     const accountChangedHandler = (account) => {
-        setAccount(account)
-
         localStorage.setItem('address', account)
+        window.location.reload()
     }
 
     const handleDisconnect = () => {
-        setAccount([])
-        setSignature(null)
+        localStorage.removeItem('token')
+        localStorage.removeItem('address')
+        localStorage.removeItem('signature')
     }
 
     window.ethereum.on('accountsChanged', accountChangedHandler);
 
-    const handleSign = sign => {
-        setSignature(sign)
+    const handleSign = async (body) => {
+        localStorage.setItem('signature', body.signature)
 
-        console.log(sign);
+        setMessage(body.message)
+        setNonce(body.uuid)
     }
 
     const style = { 'margin': 'auto', 'maxWidth': '7rem', 'marginBottom': '1rem' }
 
     return (
         <div>
-            {accounts.length ? (
-                <>
-                    {!signature && <Sign onSign={handleSign} />}
-                    {signature && <div>
-                        <h5 className='mb-5'>{accounts.substring(0, 6) + '...' + accounts.substring(accounts.length - 4, accounts.length)}</h5>
-                        <Button onClick={handleDisconnect}>Disconnect</Button>
-                    </div>}
-
-                </>) :
-                <div>
+            {
+                user && <div>
+                    <h5 className='mb-5'>{address.substring(0, 6) + '...' + address.substring(address.length - 4, address.length)}</h5>
+                    <Button onClick={handleDisconnect}>Disconnect</Button>
+                </div>
+            }
+            {
+                !signature && address && <Sign onSign={handleSign} />
+            }
+            {
+                !signature && !address && !user && <div>
                     <img src='https://assets.seracle.com/metamask.png' style={style}></img>
-                    <Button onClick={connectMetamask} >Metamask</Button>
-
-                </div>}
+                    <Button onClick={connectMetamaskButton} >Metamask</Button>
+                </div>
+            }
         </div>
 
     )

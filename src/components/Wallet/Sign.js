@@ -3,6 +3,7 @@ import Modal from '../UI/Modal'
 import classes from './Sign.module.css'
 import { Button } from 'react-bootstrap';
 import { ethers } from "ethers";
+import { v4 as uuidv4 } from 'uuid';
 
 function Sign(props) {
 
@@ -11,11 +12,18 @@ function Sign(props) {
 
         if (typeof window.ethereum !== 'undefined' || (typeof window.web3 !== 'undefined')) {
             try {
-                const message = 'this is text';
+                const uuid = uuidv4()
+                const message = `this is text`;
                 const signer = await provider.getSigner();
-                const signature = await signer.signMessage(message);
+                const signature = await signer.signMessage(`${message}Nonce:${uuid}`);
 
-                props.onSign(signature)
+                const body = {
+                    uuid: uuid,
+                    message,
+                    signature
+                }
+
+                props.onSign(body)
             }
 
             catch (e) {
