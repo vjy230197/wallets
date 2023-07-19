@@ -5,7 +5,7 @@ import Card from '../UI/Card';
 import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { GetCreatedNfts } from '../../Features/Slices/CreatedNftsSlice'
+import { GetCreatedNfts } from '../../Features/Slices/Nfts/CreatedNftsSlice'
 import Loader from '../UI/Loader';
 
 

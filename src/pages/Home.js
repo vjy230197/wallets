@@ -5,7 +5,7 @@ import classes from './Home.module.css'
 import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { GetAllNfts } from '../Features/Slices/AllNftsSlice'
+import { GetAllNfts } from '../Features/Slices/Nfts/AllNftsSlice'
 import Loader from '../components/UI/Loader';
 
 const Home = () => {

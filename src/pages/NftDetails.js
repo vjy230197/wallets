@@ -8,7 +8,7 @@ import Table from 'react-bootstrap/Table'
 import { ethers } from "ethers";
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'
-import { getNftDetails } from '../Features/Slices/NftDetailsSlice'
+import { getNftDetails } from '../Features/Slices/Nfts/NftDetailsSlice'
 
 const mintAbiArray = require('../abis/mintAbiArray');
 

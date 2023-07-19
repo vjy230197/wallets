@@ -4,7 +4,7 @@ import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Card from '../../UI/Card';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCreatedCollections } from '../../../Features/Slices/FetchCollectionSlice';
+import { getCreatedCollections } from '../../../Features/Slices/Collections/FetchCollectionSlice';
 import Loader from '../../UI/Loader';
 
 const Collection = () => {

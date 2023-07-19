@@ -5,7 +5,7 @@ import Card from '../../UI/Card';
 import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Loader from '../../UI/Loader'
-import { getCollectedNfts } from '../../../Features/Slices/CollectedNftsSlice';
+import { getCollectedNfts } from '../../../Features/Slices/Nfts/CollectedNftsSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 const Collected = () => {

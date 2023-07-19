@@ -1,9 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import allCollection from './Features/Slices/FetchCollectionSlice'
-import nftDetails from './Features/Slices/NftDetailsSlice'
-import AllNftsSlice from "./Features/Slices/AllNftsSlice";
-import CreatedNftsSlice from './Features/Slices/CreatedNftsSlice';
-import CollectedNftsSlice from "./Features/Slices/CollectedNftsSlice";
+import allCollection from './Features/Slices/Collections/FetchCollectionSlice'
+import nftDetails from './Features/Slices/Nfts/NftDetailsSlice'
+import AllNftsSlice from "./Features/Slices/Nfts/AllNftsSlice";
+import CreatedNftsSlice from './Features/Slices/Nfts/CreatedNftsSlice';
+import CollectedNftsSlice from "./Features/Slices/Nfts/CollectedNftsSlice";
 
 export const store = configureStore({
     reducer: {
