@@ -31,7 +31,7 @@ const Created = () => {
             return <Card key={index} maxWidth='20rem'>
                 <div style={{ cursor: 'pointer' }} onClick={() => { navigate(`/nftdetails/${nft.nft_id}`) }}>
                     <div className={classes.zoom_effect}>
-                        <img src={nft.image} alt="" />
+                        <img src={nft.image_url} alt="" />
                     </div>
                     <div className='py-3 text-left px-3'>
                         <h5>{nft.name}</h5>

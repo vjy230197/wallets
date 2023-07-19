@@ -1,16 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
-const address = localStorage.getItem('address');
+import authHeader from "../../Auth/auth.header";
 
 export const GetCreatedNfts = createAsyncThunk('GetCreatedNfts', async (args, { rejectWithValue }) => {
-    const API = "http://localhost:1234/createdNfts";
-    const body = {
-        address: address
-    }
+    const API = "https://preprodheftyartapi.thetrustpay.com/createdNfts";
+
     const response = await fetch(API, {
-        body: JSON.stringify(body),
-        method: 'POST',
-        headers: { "Content-Type": "application/json", 'platform': 'web' }
+        headers: { "Content-Type": "application/json", 'platform': 'web', token: authHeader() }
     });
 
     try {

@@ -32,6 +32,7 @@ const metamaskConnectSlice = createSlice({
         [connectMetamask.fulfilled]: (state, action) => {
             state.token = action.payload
             state.loading = false
+            localStorage.setItem('token', action.payload)
         },
         [connectMetamask.rejected]: (state, { payload }) => {
             state.loading = false
