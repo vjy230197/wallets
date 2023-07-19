@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-export const GetAllNfts = createAsyncThunk("GetAllNfts", async (args, { rejectWithValue }) => {
-    const API = 'http://localhost:1234/getNfts';
+export const GetAllNfts = createAsyncThunk("GetAllNfts", async (data, { rejectWithValue }) => {
+    console.log('heter', data);
+    const API = `https://preprodheftyartapi.thetrustpay.com/getNfts?page=${data.page}&limit=${data.limit}`;
     const response = await fetch(API, {
         headers: { 'platform': 'web' }
     })
@@ -20,7 +21,8 @@ export const AllNftsSlice = createSlice({
     initialState: {
         nfts: [],
         loading: false,
-        error: null
+        error: null,
+        totalCount: 0
     },
     extraReducers: {
         [GetAllNfts.pending]: (state) => {
@@ -28,7 +30,8 @@ export const AllNftsSlice = createSlice({
         },
         [GetAllNfts.fulfilled]: (state, action) => {
             state.loading = false
-            state.nfts = action.payload;
+            state.nfts = action.payload.data;
+            state.totalCount = action.payload.totalCount
         },
         [GetAllNfts.rejected]: (state, action) => {
             state.loading = false

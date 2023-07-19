@@ -135,7 +135,7 @@ const NftDetails = (props) => {
                             <div className='mb-5'>
                                 <Card maxWidth='35rem' margin='unset'>
                                     <div className='px-3 py-3'>
-                                        <img className='rounded w-full' src={nft.image} alt="" />
+                                        <img className='rounded w-full' src={nft.image_url} alt="" />
                                     </div>
                                 </Card>
                             </div>
