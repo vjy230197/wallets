@@ -7,7 +7,7 @@
 
 .zoom_effect img {
   width: 100%;
-  max-width: 25rem;
+  max-width: 30rem;
   height: 25rem;
   -webkit-transition: all 0.7s ease;
   transition: all 0.7s ease;

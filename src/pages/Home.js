@@ -43,7 +43,7 @@ const Home = () => {
     let result
     if (nfts) {
         result = nfts.map((nft, index) => {
-            return <Card style={{ 'marginBottom': '5rem' }} item={nft} key={index} maxWidth='20rem' >
+            return <Card style={{ 'marginBottom': '5rem' }} item={nft} key={index} maxWidth='30rem' >
                 <div style={{ cursor: 'pointer' }} onClick={() => { navigate(`/nftdetails/${nft.nft_id}`) }}>
                     <div className={classes.zoom_effect}>
                         <img src={nft.image_url} alt="" />
@@ -68,7 +68,7 @@ const Home = () => {
     }
 
 
-    const style = { 'margin': 'auto', 'padding': '10rem 15rem', 'display': 'grid', 'gridTemplateColumns': '1fr 1fr 1fr', 'gridGap': '5rem 0' }
+    const style = { 'margin': 'auto', 'padding': '10rem', 'display': 'grid', 'gridTemplateColumns': '1fr 1fr 1fr', 'gridGap': '3rem 3rem' }
     return (
         <>
             {
