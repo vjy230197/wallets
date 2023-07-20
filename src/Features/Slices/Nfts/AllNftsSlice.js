@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export const GetAllNfts = createAsyncThunk("GetAllNfts", async (data, { rejectWithValue }) => {
     console.log('heter', data);
-    const API = `https://preprodheftyartapi.thetrustpay.com/getNfts?page=${data.page}&limit=${data.limit}`;
+    const API = `https://preprodheftyartapi.thetrustpay.com/getNftsPoc?page=${data.page}&limit=${data.limit}`;
     const response = await fetch(API, {
         headers: { 'platform': 'web' }
     })

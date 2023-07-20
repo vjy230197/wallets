@@ -2,7 +2,7 @@ const { createSlice, createAsyncThunk } = require("@reduxjs/toolkit");
 
 export const getNftDetails = createAsyncThunk('getNftDetails', async (nft_id, { rejectWithValue }) => {
     try {
-        const API = `https://preprodheftyartapi.thetrustpay.com/nftDetail?nft_id=${nft_id}`
+        const API = `https://preprodheftyartapi.thetrustpay.com/getNftDetailsPoc?nft_id=${nft_id}`
         const response = await fetch(API, {
             method: 'GET',
             headers: { "Content-Type": "application/json", 'platform': 'web' }
