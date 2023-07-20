@@ -44,7 +44,8 @@ function Metamask() {
     }
 
     const accountChangedHandler = (account) => {
-        localStorage.setItem('address', account)
+        localStorage.setItem('address', account[0])
+        localStorage.removeItem('signature')
         window.location.reload()
     }
 
